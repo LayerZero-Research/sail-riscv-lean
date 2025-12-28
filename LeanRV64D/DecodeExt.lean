@@ -182,6 +182,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def ext_decode_compressed (bv : (BitVec 16)) : SailM instruction := do
   (encdec_compressed_backwards bv)

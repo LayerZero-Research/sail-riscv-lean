@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_Software_Check_Code (_ : Unit) : SailM Software_Check_Code := do
   (internal_pick [SWC_NO_INFO, SWC_LANDING_PAD_FAULT])

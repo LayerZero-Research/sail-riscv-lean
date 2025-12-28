@@ -3,7 +3,6 @@ import LeanRV64D.Prelude
 import LeanRV64D.Errors
 import LeanRV64D.Xlen
 import LeanRV64D.PlatformConfig
-import LeanRV64D.Extensions
 import LeanRV64D.Types
 import LeanRV64D.Callbacks
 import LeanRV64D.Regs
@@ -197,6 +196,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def effectivePrivilege (access_type : (MemoryAccessType Unit)) (m : (BitVec 64)) (priv : Privilege) : SailM Privilege := do
   if (((bne access_type (InstructionFetch ())) && ((_get_Mstatus_MPRV m) == 1#1)) : Bool)

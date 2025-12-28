@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def ptw_start_callback (x_0 : (BitVec 64)) (x_1 : (MemoryAccessType Unit)) (x_2 : (Privilege × Unit)) : Unit :=
   ()

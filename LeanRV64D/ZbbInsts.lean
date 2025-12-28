@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def zbb_rtypew_mnemonic_backwards (arg_ : String) : SailM bropw_zbb := do
   match arg_ with

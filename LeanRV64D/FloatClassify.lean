@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def float_class_onehot_bits_forwards (arg_ : float_class) : (BitVec 10) :=
   match arg_ with

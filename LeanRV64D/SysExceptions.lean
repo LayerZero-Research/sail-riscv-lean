@@ -183,6 +183,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def ext_check_xret_priv (_p : Privilege) : Bool :=
   true

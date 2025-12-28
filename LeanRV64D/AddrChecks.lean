@@ -182,6 +182,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def ext_fetch_check_pc (_start_pc : (BitVec 64)) (_pc : (BitVec 64)) : (Option Unit) :=
   none

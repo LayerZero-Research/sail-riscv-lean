@@ -184,6 +184,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 /-- Type quantifiers: k_n : Nat, k_n ≥ 0, is_fp_bits(k_n) -/
 def float_is_lt_quiet (op_0 : (BitVec k_n)) (op_1 : (BitVec k_n)) : (Bool × (BitVec 5)) :=

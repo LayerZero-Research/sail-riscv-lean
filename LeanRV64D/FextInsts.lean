@@ -1,6 +1,6 @@
 import LeanRV64D.Flow
 import LeanRV64D.Prelude
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 import LeanRV64D.FdextRegs
 
 set_option maxHeartbeats 1_000_000_000
@@ -185,6 +185,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def encdec_rounding_mode_backwards (arg_ : (BitVec 3)) : SailM rounding_mode := do
   match arg_ with
@@ -349,7 +350,7 @@ def feq_quiet_S (v1 : (BitVec 32)) (v2 : (BitVec 32)) : (Bool × (BitVec 5)) :=
     else (zeros (n := 5))
   (result, fflags)
 
-/-- Type quantifiers: k_ex663340_ : Bool -/
+/-- Type quantifiers: k_ex663292_ : Bool -/
 def flt_S (v1 : (BitVec 32)) (v2 : (BitVec 32)) (is_quiet : Bool) : (Bool × (BitVec 5)) :=
   let (s1, e1, m1) := (fsplit_S v1)
   let (s2, e2, m2) := (fsplit_S v2)
@@ -381,7 +382,7 @@ def flt_S (v1 : (BitVec 32)) (v2 : (BitVec 32)) (is_quiet : Bool) : (Bool × (Bi
       else (zeros (n := 5)))
   (result, fflags)
 
-/-- Type quantifiers: k_ex663426_ : Bool -/
+/-- Type quantifiers: k_ex663378_ : Bool -/
 def fle_S (v1 : (BitVec 32)) (v2 : (BitVec 32)) (is_quiet : Bool) : (Bool × (BitVec 5)) :=
   let (s1, e1, m1) := (fsplit_S v1)
   let (s2, e2, m2) := (fsplit_S v2)

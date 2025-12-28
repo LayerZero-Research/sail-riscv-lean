@@ -182,6 +182,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_seed_opst (_ : Unit) : SailM seed_opst := do
   (internal_pick [BIST, ES16, WAIT, DEAD])

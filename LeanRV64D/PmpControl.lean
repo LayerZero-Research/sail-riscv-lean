@@ -185,6 +185,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def pmpCheckRWX (ent : (BitVec 8)) (acc : (MemoryAccessType Unit)) : Bool :=
   match acc with

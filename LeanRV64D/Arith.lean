@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def regidx_offset (typ_0 : regidx) (o : (BitVec (if ( false  : Bool) then 4 else 5))) : regidx :=
   let .Regidx r : regidx := typ_0

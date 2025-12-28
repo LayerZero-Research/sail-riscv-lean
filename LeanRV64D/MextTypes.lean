@@ -182,6 +182,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_mul_op (_ : Unit) : SailM mul_op := do
   (pure { result_part := ← (undefined_VectorHalf ())

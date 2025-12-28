@@ -185,6 +185,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def fsplit_BF16 (v : (BitVec 16)) : ((BitVec 1) × (BitVec 8) × (BitVec 7)) :=
   ((Sail.BitVec.extractLsb v 15 15), (Sail.BitVec.extractLsb v 14 7), (Sail.BitVec.extractLsb v 6 0))

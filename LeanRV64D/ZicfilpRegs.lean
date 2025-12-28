@@ -1,6 +1,6 @@
 import LeanRV64D.Prelude
 import LeanRV64D.Errors
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 import LeanRV64D.SysRegs
 
 set_option maxHeartbeats 1_000_000_000
@@ -185,6 +185,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_landing_pad_expectation (_ : Unit) : SailM landing_pad_expectation := do
   (internal_pick [NO_LP_EXPECTED, LP_EXPECTED])

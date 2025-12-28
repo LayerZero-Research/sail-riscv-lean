@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 /-- Type quantifiers: k_a : Type -/
 def is_none (opt : (Option k_a)) : Bool :=

@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 /-- Type quantifiers: k_n : Nat, k_n ≥ 0 -/
 def concat_str_bits (str : String) (x : (BitVec k_n)) : String :=

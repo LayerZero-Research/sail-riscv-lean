@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_wrsop (_ : Unit) : SailM wrsop := do
   (internal_pick [WRS_STO, WRS_NTO])

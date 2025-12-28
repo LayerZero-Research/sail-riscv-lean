@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def ext_check_CSR (_csrno : (BitVec 12)) (_p : Privilege) (_access_type : CSRAccessType) : Bool :=
   true

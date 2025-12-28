@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_zicondop (_ : Unit) : SailM zicondop := do
   (internal_pick [CZERO_EQZ, CZERO_NEZ])

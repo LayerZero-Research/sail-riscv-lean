@@ -183,6 +183,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def make_landing_pad_exception (_ : Unit) : sync_exception :=
   { trap := (E_Software_Check ())

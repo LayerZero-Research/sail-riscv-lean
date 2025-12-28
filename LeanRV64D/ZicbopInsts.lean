@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def encdec_cbop_zicbop_backwards (arg_ : (BitVec 5)) : SailM cbop_zicbop := do
   match arg_ with

@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def encdec_vsha2_backwards (arg_ : (BitVec 6)) : SailM zvk_vsha2_funct6 := do
   match arg_ with

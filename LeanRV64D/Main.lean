@@ -184,6 +184,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def sail_main (_ : Unit) : SailM Unit := do
   sailTryCatch ((do
@@ -193,5 +194,6 @@ def sail_main (_ : Unit) : SailM Unit := do
       (loop ()))) (fun the_exception => 
     match the_exception with
       | .Error_not_implemented s => (pure (print_string "Error: Not implemented: " s))
-      | .Error_internal_error () => (pure (print "Error: internal error")))
+      | .Error_internal_error () => (pure (print "Error: internal error"))
+      | e => sailThrow (e))
 

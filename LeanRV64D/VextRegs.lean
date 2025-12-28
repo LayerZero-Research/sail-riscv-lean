@@ -1,6 +1,6 @@
 import LeanRV64D.Prelude
 import LeanRV64D.Vlen
-import LeanRV64D.Extensions
+import LeanRV64D.PlatformConfig
 import LeanRV64D.Types
 import LeanRV64D.Callbacks
 
@@ -186,6 +186,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def vregidx_to_vregno (app_0 : vregidx) : vregno :=
   let .Vregidx b := app_0

@@ -183,6 +183,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def xt2 (x : (BitVec 8)) : (BitVec 8) :=
   ((shiftl x 1) ^^^ (if ((bit_to_bool (BitVec.access x 7)) : Bool)

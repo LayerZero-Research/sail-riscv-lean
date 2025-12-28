@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_vvfunct6 (_ : Unit) : SailM vvfunct6 := do
   (internal_pick

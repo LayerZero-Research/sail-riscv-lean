@@ -183,6 +183,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def fp_eflag_none : fp_exception_flags := 0b00000#5
 

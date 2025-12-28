@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def zbs_iop_mnemonic_backwards (arg_ : String) : SailM biop_zbs := do
   match arg_ with

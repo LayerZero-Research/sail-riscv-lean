@@ -1,6 +1,7 @@
 import LeanRV64D.Flow
 import LeanRV64D.Prelude
 import LeanRV64D.RvfiDii
+import LeanRV64D.PlatformConfig
 import LeanRV64D.Types
 import LeanRV64D.Regs
 import LeanRV64D.PcAccess
@@ -190,6 +191,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def rvfi_fetch (_ : Unit) : SailM FetchResult := SailME.run do
   writeReg rvfi_inst_data (Sail.BitVec.updateSubrange (← readReg rvfi_inst_data) 63 0

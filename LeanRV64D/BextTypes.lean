@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_brop_zbb (_ : Unit) : SailM brop_zbb := do
   (internal_pick [ANDN, ORN, XNOR, MAX, MAXU, MIN, MINU, ROL, ROR])

@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_csrop (_ : Unit) : SailM csrop := do
   (internal_pick [CSRRW, CSRRS, CSRRC])

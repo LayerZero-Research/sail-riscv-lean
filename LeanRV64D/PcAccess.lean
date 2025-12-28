@@ -185,6 +185,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def get_arch_pc (_ : Unit) : SailM (BitVec 64) := do
   readReg PC

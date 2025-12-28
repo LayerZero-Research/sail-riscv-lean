@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_Access_variety (_ : Unit) : SailM Access_variety := do
   (internal_pick [AV_plain, AV_exclusive, AV_atomic_rmw])

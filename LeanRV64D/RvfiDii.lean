@@ -183,6 +183,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_RVFI_DII_Instruction_Packet (_ : Unit) : SailM (BitVec 64) := do
   (undefined_bitvector 64)

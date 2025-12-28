@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_ntl_type (_ : Unit) : SailM ntl_type := do
   (internal_pick [NTL_P1, NTL_PALL, NTL_S1, NTL_ALL])

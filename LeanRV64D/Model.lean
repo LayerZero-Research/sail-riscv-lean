@@ -191,6 +191,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def reset (_ : Unit) : SailM Unit := do
   writeReg hart_state (HART_ACTIVE ())

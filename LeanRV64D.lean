@@ -3,8 +3,7 @@ import LeanRV64D.Common
 import LeanRV64D.Prelude
 import LeanRV64D.Xlen
 import LeanRV64D.RvfiDii
-import LeanRV64D.Extensions
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 import LeanRV64D.Regs
 import LeanRV64D.SysRegs
 import LeanRV64D.PmpRegs
@@ -204,6 +203,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def initialize_registers (_ : Unit) : SailM Unit := do
   writeReg rvfi_instruction (← (undefined_RVFI_DII_Instruction_Packet ()))

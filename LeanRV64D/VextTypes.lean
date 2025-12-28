@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def encdec_nfields_forwards (arg_ : (BitVec 3)) : Int :=
   match arg_ with

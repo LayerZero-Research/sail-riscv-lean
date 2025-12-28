@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_cbop_zicbom (_ : Unit) : SailM cbop_zicbom := do
   (internal_pick [CBO_CLEAN, CBO_FLUSH, CBO_INVAL])

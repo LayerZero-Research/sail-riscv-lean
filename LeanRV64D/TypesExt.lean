@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def init_ext_ptw : ext_ptw := ()
 
@@ -214,7 +215,4 @@ def ext_exc_type_bits_backwards_matches (arg_ : (BitVec 6)) : Bool :=
   match arg_ with
   | 0b011000 => true
   | _ => false
-
-def ext_exc_type_to_str (_e : Unit) : String :=
-  "extension-exception"
 

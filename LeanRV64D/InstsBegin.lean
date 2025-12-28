@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def RETIRE_SUCCESS : ExecutionResult := (Retire_Success ())
 

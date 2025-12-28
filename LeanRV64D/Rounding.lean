@@ -182,6 +182,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def float_get_rounding (_ : Unit) : SailM (BitVec 5) := do
   readReg fp_rounding_global

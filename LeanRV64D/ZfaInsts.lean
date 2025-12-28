@@ -185,6 +185,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def fcvtmod_helper (x64 : (BitVec 64)) : ((BitVec 5) × (BitVec 32)) :=
   let (sign, exp, mant) := (fsplit_D x64)

@@ -1,4 +1,4 @@
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -182,6 +182,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_CountSmcntrpmf (_ : Unit) : SailM (BitVec 64) := do
   (undefined_bitvector 64)

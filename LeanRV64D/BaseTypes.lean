@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_uop (_ : Unit) : SailM uop := do
   (internal_pick [LUI, AUIPC])

@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 /-- Type quantifiers: k_a : Type, k_b : Type -/
 def is_ok (r : (Result k_a k_b)) : Bool :=

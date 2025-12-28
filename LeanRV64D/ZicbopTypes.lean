@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_cbop_zicbop (_ : Unit) : SailM cbop_zicbop := do
   (internal_pick [PREFETCH_I, PREFETCH_R, PREFETCH_W])

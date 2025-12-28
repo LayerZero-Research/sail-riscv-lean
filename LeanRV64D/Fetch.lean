@@ -1,6 +1,6 @@
 import LeanRV64D.Flow
 import LeanRV64D.Prelude
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 import LeanRV64D.Regs
 import LeanRV64D.AddrChecks
 import LeanRV64D.Mem
@@ -189,6 +189,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def isRVC (h : (BitVec 16)) : Bool :=
   (not ((Sail.BitVec.extractLsb h 1 0) == 0b11#2))

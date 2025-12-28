@@ -185,6 +185,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_write_kind (_ : Unit) : SailM write_kind := do
   (internal_pick
@@ -312,7 +313,7 @@ def write_ram_ea (_wk : write_kind) (app_1 : physaddr) (_width : Nat) : Unit :=
   let .Physaddr _addr := app_1
   ()
 
-/-- Type quantifiers: k_ex647207_ : Bool, width : Nat, width ≥ 0, 0 < width ∧
+/-- Type quantifiers: k_ex647165_ : Bool, width : Nat, width ≥ 0, 0 < width ∧
   width ≤ max_mem_access -/
 def read_ram (rk : read_kind) (app_1 : physaddr) (width : Nat) (read_meta : Bool) : SailM ((BitVec (8 * width)) × Unit) := do
   let .Physaddr addr := app_1

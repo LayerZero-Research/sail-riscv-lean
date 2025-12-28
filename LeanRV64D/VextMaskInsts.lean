@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def encdec_mmfunct6_backwards (arg_ : (BitVec 6)) : SailM mmfunct6 := do
   match arg_ with

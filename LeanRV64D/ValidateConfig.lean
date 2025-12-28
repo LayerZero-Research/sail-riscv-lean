@@ -4,7 +4,6 @@ import LeanRV64D.Prelude
 import LeanRV64D.Xlen
 import LeanRV64D.Vlen
 import LeanRV64D.PlatformConfig
-import LeanRV64D.Extensions
 import LeanRV64D.PmpRegs
 import LeanRV64D.Pma
 
@@ -190,6 +189,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def check_privs (_ : Unit) : Bool :=
   if (((hartSupports Ext_S) && (not (hartSupports Ext_U))) : Bool)
@@ -491,7 +491,7 @@ def check_pmp (_ : Unit) : Bool :=
     valid)
   else valid
 
-/-- Type quantifiers: k_ex739491_ : Bool -/
+/-- Type quantifiers: k_ex739443_ : Bool -/
 def check_required_sstvala_option (name : String) (value : Bool) : Bool :=
   if ((not value) : Bool)
   then

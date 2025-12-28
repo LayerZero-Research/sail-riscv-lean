@@ -1,4 +1,4 @@
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 import LeanRV64D.SysRegs
 
 set_option maxHeartbeats 1_000_000_000
@@ -183,6 +183,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def cbo_zero_enabled (p : Privilege) : SailM Bool := do
   (feature_enabled_for_priv p (BitVec.access (_get_MEnvcfg_CBZE (← readReg menvcfg)) 0)

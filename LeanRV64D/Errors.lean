@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 /-- Type quantifiers: k_a : Type -/
 def not_implemented (message : String) : SailM k_a := do
@@ -198,4 +199,8 @@ def internal_error (file : String) (line : Int) (s : String) : SailM k_a := do
   assert false (HAppend.hAppend file
     (HAppend.hAppend ":" (HAppend.hAppend (Int.repr line) (HAppend.hAppend ": " s))))
   throw Error.Exit
+
+/-- Type quantifiers: k_a : Type -/
+def reserved_behavior (message : String) : SailM k_a := do
+  sailThrow ((Error_reserved_behavior (HAppend.hAppend "Reserved behavior: " message)))
 

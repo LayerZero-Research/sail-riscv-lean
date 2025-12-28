@@ -182,6 +182,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def csr_name_map_forwards_matches (arg_ : (BitVec 12)) : Bool :=
   match arg_ with

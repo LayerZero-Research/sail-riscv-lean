@@ -184,6 +184,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def test_mstatus_sxl_uxl_reset_values (_ : Unit) : SailM Unit := do
   let mstatush_val ← (( do

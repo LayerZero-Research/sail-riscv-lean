@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def zba_rtypeuw_mnemonic_backwards (arg_ : String) : SailM (BitVec 2) := do
   match arg_ with

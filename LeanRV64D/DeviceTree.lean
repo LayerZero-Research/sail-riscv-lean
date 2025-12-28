@@ -187,6 +187,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def mmu_type (_ : Unit) : SailM String := do
   assert (xlen == 64) "postlude/device_tree.sail:14.21-14.22"

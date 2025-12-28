@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def undefined_vector_support (_ : Unit) : SailM vector_support := do
   (internal_pick [Disabled, Integer, Float_single, Float_double, Full])

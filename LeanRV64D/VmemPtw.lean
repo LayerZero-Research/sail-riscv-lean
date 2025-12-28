@@ -182,6 +182,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def ext_get_ptw_error (failure : pte_check_failure) : PTW_Error :=
   match failure with

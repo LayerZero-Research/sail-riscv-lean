@@ -1,7 +1,7 @@
 import LeanRV64D.Flow
 import LeanRV64D.Prelude
 import LeanRV64D.Flen
-import LeanRV64D.Extensions
+import LeanRV64D.PlatformConfig
 import LeanRV64D.Types
 import LeanRV64D.Callbacks
 import LeanRV64D.Regs
@@ -189,6 +189,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 /-- Type quantifiers: n : Nat, n ≥ 0, n ∈ {16, 32, 64, 128} -/
 def canonical_NaN {n : _} : (BitVec n) :=

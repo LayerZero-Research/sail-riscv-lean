@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def encdec_wrsop_backwards (arg_ : (BitVec 12)) : SailM wrsop := do
   match arg_ with

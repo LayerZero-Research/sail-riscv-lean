@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def vsm4r_mnemonic_backwards (arg_ : String) : SailM zvk_vsm4r_funct6 := do
   match arg_ with

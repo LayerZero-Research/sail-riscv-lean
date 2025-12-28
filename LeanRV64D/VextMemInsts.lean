@@ -4,7 +4,7 @@ import LeanRV64D.Prelude
 import LeanRV64D.Errors
 import LeanRV64D.Xlen
 import LeanRV64D.Vlen
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 import LeanRV64D.VmemTypes
 import LeanRV64D.Callbacks
 import LeanRV64D.VextRegs
@@ -195,6 +195,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def vlewidth_bitsnumberstr_backwards (arg_ : String) : SailM vlewidth := do
   match arg_ with

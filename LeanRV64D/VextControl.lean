@@ -2,7 +2,7 @@ import LeanRV64D.Flow
 import LeanRV64D.Arith
 import LeanRV64D.Prelude
 import LeanRV64D.Vlen
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 import LeanRV64D.VextRegs
 
 set_option maxHeartbeats 1_000_000_000
@@ -187,6 +187,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 /-- Type quantifiers: SEW : Nat, LMUL_pow : Int, ((- 3)) ≤ LMUL_pow ∧ LMUL_pow ≤ 3, SEW ∈
   {8, 16, 32, 64} -/

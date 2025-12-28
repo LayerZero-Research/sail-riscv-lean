@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def encdec_amoop_backwards (arg_ : (BitVec 5)) : SailM amoop := do
   match arg_ with

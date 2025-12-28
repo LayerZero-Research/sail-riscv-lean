@@ -2,7 +2,7 @@ import LeanRV64D.Flow
 import LeanRV64D.Arith
 import LeanRV64D.Prelude
 import LeanRV64D.Xlen
-import LeanRV64D.Types
+import LeanRV64D.PlatformConfig
 import LeanRV64D.Callbacks
 import LeanRV64D.RegType
 
@@ -188,6 +188,7 @@ open ExceptionType
 open CSRAccessType
 open AtomicSupport
 open Architecture
+open AmocasOddRegisterReservedBehavior
 
 def encdec_reg_backwards_matches (arg_ : (BitVec 5)) : Bool :=
   let r := arg_
