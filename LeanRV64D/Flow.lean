@@ -174,6 +174,7 @@ open SWCheckCodes
 open SATPMode
 open Reservability
 open Register
+open RV32ZdinxOddRegisterReservedBehavior
 open Privilege
 open PmpWriteOnlyReservedBehavior
 open PmpAddrMatchType
@@ -193,7 +194,7 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_ex739443_ : Bool, k_ex739442_ : Bool -/
+/-- Type quantifiers: k_ex739472_ : Bool, k_ex739471_ : Bool -/
 def neq_bool (x : Bool) (y : Bool) : Bool :=
   (! (x == y))
 

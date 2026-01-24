@@ -170,6 +170,7 @@ open SWCheckCodes
 open SATPMode
 open Reservability
 open Register
+open RV32ZdinxOddRegisterReservedBehavior
 open Privilege
 open PmpWriteOnlyReservedBehavior
 open PmpAddrMatchType
@@ -189,13 +190,13 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_ex740383_ : Nat, k_ex740383_ ∈ {16, 32, 64, 128} -/
-def float_is_normal (op : (BitVec k_ex740383_)) : Bool :=
+/-- Type quantifiers: k_ex740412_ : Nat, k_ex740412_ ∈ {16, 32, 64, 128} -/
+def float_is_normal (op : (BitVec k_ex740412_)) : Bool :=
   let { exp := exp, sign := _, mantissa := _ } := (float_decompose op)
   ((! (is_all_ones exp)) && (! (is_all_zeros exp)))
 
-/-- Type quantifiers: k_ex740401_ : Nat, k_ex740401_ ∈ {16, 32, 64, 128} -/
-def float_is_subnormal (op : (BitVec k_ex740401_)) : Bool :=
+/-- Type quantifiers: k_ex740430_ : Nat, k_ex740430_ ∈ {16, 32, 64, 128} -/
+def float_is_subnormal (op : (BitVec k_ex740430_)) : Bool :=
   let { exp := exp, mantissa := mantissa, sign := _ } := (float_decompose op)
   ((is_all_zeros exp) && (! (is_all_zeros mantissa)))
 

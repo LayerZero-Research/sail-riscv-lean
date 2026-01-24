@@ -6,7 +6,7 @@
 --   SPDX-License-Identifier: BSD-2-Clause
 -- =======================================================================================
 
-import LeanRV64D.Sail.Sail
+import Sail.Sail
 import LeanRV64D.Defs
 
 open Sail

@@ -180,6 +180,7 @@ open SWCheckCodes
 open SATPMode
 open Reservability
 open Register
+open RV32ZdinxOddRegisterReservedBehavior
 open Privilege
 open PmpWriteOnlyReservedBehavior
 open PmpAddrMatchType
@@ -301,6 +302,20 @@ def PmpWriteOnlyReservedBehavior_str_forwards (arg_ : PmpWriteOnlyReservedBehavi
   match arg_ with
   | PMP_Fatal => "PMP_Fatal"
   | PMP_ClearPermissions => "PMP_ClearPermissions"
+
+def RV32ZdinxOddRegisterReservedBehavior_str_backwards (arg_ : String) : SailM RV32ZdinxOddRegisterReservedBehavior := do
+  match arg_ with
+  | "Zdinx_Fatal" => (pure Zdinx_Fatal)
+  | "Zdinx_Illegal" => (pure Zdinx_Illegal)
+  | _ =>
+    (do
+      assert false "Pattern match failure at unknown location"
+      throw Error.Exit)
+
+def RV32ZdinxOddRegisterReservedBehavior_str_forwards (arg_ : RV32ZdinxOddRegisterReservedBehavior) : String :=
+  match arg_ with
+  | Zdinx_Fatal => "Zdinx_Fatal"
+  | Zdinx_Illegal => "Zdinx_Illegal"
 
 def XenvcfgCbieReservedBehavior_str_backwards (arg_ : String) : SailM XenvcfgCbieReservedBehavior := do
   match arg_ with
@@ -1452,7 +1467,7 @@ def itype_mnemonic_forwards (arg_ : iop) : String :=
   | ORI => "ori"
   | ANDI => "andi"
 
-/-- Type quantifiers: k_ex742125_ : Bool -/
+/-- Type quantifiers: k_ex742154_ : Bool -/
 def maybe_u_forwards (arg_ : Bool) : String :=
   match arg_ with
   | true => "u"
@@ -6398,7 +6413,7 @@ def lrsc_width_valid (width : Nat) : Bool :=
 def validDoubleRegs {n : _} (regs : (Vector fregidx n)) : Bool :=
   true
 
-/-- Type quantifiers: k_ex744252_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
+/-- Type quantifiers: k_ex744281_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
 def valid_load_encdec (width : Nat) (is_unsigned : Bool) : Bool :=
   ((width <b xlen_bytes) || ((not is_unsigned) && (width ≤b xlen_bytes)))
 
@@ -10627,5 +10642,32 @@ def XenvcfgCbieReservedBehavior_str_backwards_matches (arg_ : String) : Bool :=
   | "Xenvcfg_ClearPermissions" => true
   | _ => false
 
+def undefined_RV32ZdinxOddRegisterReservedBehavior (_ : Unit) : SailM RV32ZdinxOddRegisterReservedBehavior := do
+  (internal_pick [Zdinx_Fatal, Zdinx_Illegal])
+
+/-- Type quantifiers: arg_ : Nat, 0 ≤ arg_ ∧ arg_ ≤ 1 -/
+def RV32ZdinxOddRegisterReservedBehavior_of_num (arg_ : Nat) : RV32ZdinxOddRegisterReservedBehavior :=
+  match arg_ with
+  | 0 => Zdinx_Fatal
+  | _ => Zdinx_Illegal
+
+def num_of_RV32ZdinxOddRegisterReservedBehavior (arg_ : RV32ZdinxOddRegisterReservedBehavior) : Int :=
+  match arg_ with
+  | Zdinx_Fatal => 0
+  | Zdinx_Illegal => 1
+
+def RV32ZdinxOddRegisterReservedBehavior_str_forwards_matches (arg_ : RV32ZdinxOddRegisterReservedBehavior) : Bool :=
+  match arg_ with
+  | Zdinx_Fatal => true
+  | Zdinx_Illegal => true
+
+def RV32ZdinxOddRegisterReservedBehavior_str_backwards_matches (arg_ : String) : Bool :=
+  match arg_ with
+  | "Zdinx_Fatal" => true
+  | "Zdinx_Illegal" => true
+  | _ => false
+
 def pmp_write_only_reserved_behavior : PmpWriteOnlyReservedBehavior := PMP_ClearPermissions
+
+def rv32zdinx_odd_register_reserved_behavior : RV32ZdinxOddRegisterReservedBehavior := Zdinx_Illegal
 

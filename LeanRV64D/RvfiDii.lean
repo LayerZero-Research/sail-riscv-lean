@@ -171,6 +171,7 @@ open SWCheckCodes
 open SATPMode
 open Reservability
 open Register
+open RV32ZdinxOddRegisterReservedBehavior
 open Privilege
 open PmpWriteOnlyReservedBehavior
 open PmpAddrMatchType

@@ -189,6 +189,7 @@ open SWCheckCodes
 open SATPMode
 open Reservability
 open Register
+open RV32ZdinxOddRegisterReservedBehavior
 open Privilege
 open PmpWriteOnlyReservedBehavior
 open PmpAddrMatchType
@@ -231,7 +232,7 @@ def encdec_csrop_backwards_matches (arg_ : (BitVec 2)) : Bool :=
   | 0b11 => true
   | _ => false
 
-/-- Type quantifiers: k_ex761259_ : Bool, k_ex761258_ : Bool -/
+/-- Type quantifiers: k_ex761290_ : Bool, k_ex761289_ : Bool -/
 def csr_access_type (op : csrop) (rd_is_x0 : Bool) (rs1_imm_is_zero : Bool) : CSRAccessType :=
   match (op, rd_is_x0, rs1_imm_is_zero) with
   | (CSRRW, true, _) => CSRWrite

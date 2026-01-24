@@ -177,6 +177,7 @@ open SWCheckCodes
 open SATPMode
 open Reservability
 open Register
+open RV32ZdinxOddRegisterReservedBehavior
 open Privilege
 open PmpWriteOnlyReservedBehavior
 open PmpAddrMatchType
@@ -496,7 +497,7 @@ def check_pmp (_ : Unit) : Bool :=
     valid)
   else valid
 
-/-- Type quantifiers: k_ex856298_ : Bool -/
+/-- Type quantifiers: k_ex856331_ : Bool -/
 def check_required_sstvala_option (name : String) (value : Bool) : Bool :=
   if ((not value) : Bool)
   then

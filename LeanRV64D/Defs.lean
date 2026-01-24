@@ -174,6 +174,10 @@ inductive PmpWriteOnlyReservedBehavior where | PMP_Fatal | PMP_ClearPermissions
   deriving BEq, Inhabited, Repr
   open PmpWriteOnlyReservedBehavior
 
+inductive RV32ZdinxOddRegisterReservedBehavior where | Zdinx_Fatal | Zdinx_Illegal
+  deriving BEq, Inhabited, Repr
+  open RV32ZdinxOddRegisterReservedBehavior
+
 inductive XenvcfgCbieReservedBehavior where | Xenvcfg_Fatal | Xenvcfg_ClearPermissions
   deriving BEq, Inhabited, Repr
   open XenvcfgCbieReservedBehavior

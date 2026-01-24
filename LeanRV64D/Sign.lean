@@ -170,6 +170,7 @@ open SWCheckCodes
 open SATPMode
 open Reservability
 open Register
+open RV32ZdinxOddRegisterReservedBehavior
 open Privilege
 open PmpWriteOnlyReservedBehavior
 open PmpAddrMatchType
@@ -189,11 +190,11 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_ex740372_ : Nat, k_ex740372_ ∈ {16, 32, 64, 128} -/
-def float_is_positive (op : (BitVec k_ex740372_)) : Bool :=
+/-- Type quantifiers: k_ex740401_ : Nat, k_ex740401_ ∈ {16, 32, 64, 128} -/
+def float_is_positive (op : (BitVec k_ex740401_)) : Bool :=
   (is_highest_zero op)
 
-/-- Type quantifiers: k_ex740374_ : Nat, k_ex740374_ ∈ {16, 32, 64, 128} -/
-def float_is_negative (op : (BitVec k_ex740374_)) : Bool :=
+/-- Type quantifiers: k_ex740403_ : Nat, k_ex740403_ ∈ {16, 32, 64, 128} -/
+def float_is_negative (op : (BitVec k_ex740403_)) : Bool :=
   (is_highest_one op)
 
