@@ -160,6 +160,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -336,7 +337,7 @@ def pmpWriteCfgReg (n : Nat) (v : (BitVec 64)) : SailM Unit := do
       else (pure ())
   (pure loop_vars)
 
-/-- Type quantifiers: k_ex753123_ : Bool, k_ex753122_ : Bool -/
+/-- Type quantifiers: k_ex753509_ : Bool, k_ex753508_ : Bool -/
 def pmpWriteAddr (locked : Bool) (tor_locked : Bool) (reg : (BitVec 64)) (v : (BitVec 64)) : (BitVec 64) :=
   if ((locked || tor_locked) : Bool)
   then reg

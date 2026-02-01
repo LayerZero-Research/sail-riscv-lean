@@ -1,4 +1,8 @@
-import LeanRV64D.Prelude
+import Sail
+import LeanRV64D.Defs
+import LeanRV64D.Specialization
+import LeanRV64D.FakeReal
+import LeanRV64D.RiscvExtras
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -192,33 +196,43 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_n : Nat, k_n ≥ 0, 0 ≤ k_n ∧ k_n ≤ 64 -/
-def range_subset (a_begin : (BitVec k_n)) (a_size : (BitVec k_n)) (b_begin : (BitVec k_n)) (b_size : (BitVec k_n)) : Bool :=
-  let a_end := ((a_begin + a_size) - b_begin)
-  let b_end := ((b_begin + b_size) - b_begin)
-  let a_begin := (a_begin - b_begin)
-  ((zopz0zIzJ_u a_begin b_end) && ((zopz0zIzJ_u a_end b_end) && (zopz0zIzJ_u a_begin a_end)))
+def encdec_biop_backwards (arg_ : (BitVec 3)) : SailM biop := do
+  match arg_ with
+  | 0b010 => (pure BEQI)
+  | 0b011 => (pure BNEI)
+  | _ =>
+    (do
+      assert false "Pattern match failure at unknown location"
+      throw Error.Exit)
 
-def test_range_subset (_ : Unit) : SailM Unit := do
-  assert (range_subset 0x0#4 0x0#4 0x0#4 0x0#4) "core/range_util.sail:27.41-27.42"
-  assert (range_subset 0x1#4 0x0#4 0x1#4 0x0#4) "core/range_util.sail:28.41-28.42"
-  assert (range_subset 0x0#4 0x0#4 0x0#4 0x1#4) "core/range_util.sail:29.41-29.42"
-  assert (range_subset 0x1#4 0x0#4 0x0#4 0x1#4) "core/range_util.sail:30.41-30.42"
-  assert (range_subset 0x8#4 0xC#4 0x8#4 0xC#4) "core/range_util.sail:31.41-31.42"
-  assert (not (range_subset 0x8#4 0xC#4 0x9#4 0xC#4)) "core/range_util.sail:32.46-32.47"
-  assert (not (range_subset 0x8#4 0xC#4 0x8#4 0xB#4)) "core/range_util.sail:33.46-33.47"
-  assert (not (range_subset 0x3E#8 0xE0#8 0xC1#8 0x9F#8)) "core/range_util.sail:34.50-34.51"
-  assert (not (range_subset 0xC1#8 0x9F#8 0x3E#8 0xE0#8)) "core/range_util.sail:35.50-35.51"
+def encdec_biop_forwards_matches (arg_ : biop) : Bool :=
+  match arg_ with
+  | BEQI => true
+  | BNEI => true
 
-def range_subset_equals (a_begin : (BitVec 8)) (a_size : (BitVec 8)) (b_begin : (BitVec 8)) (b_size : (BitVec 8)) : Bool :=
-  (zopz0zJzJzK
-    ((range_subset a_begin a_size b_begin b_size) && (range_subset b_begin b_size a_begin a_size))
-    ((a_begin == b_begin) && (a_size == b_size)))
+def encdec_biop_backwards_matches (arg_ : (BitVec 3)) : Bool :=
+  match arg_ with
+  | 0b010 => true
+  | 0b011 => true
+  | _ => false
 
-def range_subset_precise (a_begin : (BitVec 8)) (a_size : (BitVec 8)) (b_begin : (BitVec 8)) (b_size : (BitVec 8)) (index : (BitVec 8)) : Bool :=
-  let index_in_a := (zopz0zI_u (index - a_begin) a_size)
-  let index_in_b := (zopz0zI_u (index - b_begin) b_size)
-  let is_subset := (range_subset a_begin a_size b_begin b_size)
-  ((zopz0zJzJzK (is_subset && index_in_a) index_in_b) && (zopz0zJzJzK
-      (index_in_a && (not index_in_b)) (not is_subset)))
+def bitype_mnemonic_backwards (arg_ : String) : SailM biop := do
+  match arg_ with
+  | "beqi" => (pure BEQI)
+  | "bnei" => (pure BNEI)
+  | _ =>
+    (do
+      assert false "Pattern match failure at unknown location"
+      throw Error.Exit)
+
+def bitype_mnemonic_forwards_matches (arg_ : biop) : Bool :=
+  match arg_ with
+  | BEQI => true
+  | BNEI => true
+
+def bitype_mnemonic_backwards_matches (arg_ : String) : Bool :=
+  match arg_ with
+  | "beqi" => true
+  | "bnei" => true
+  | _ => false
 

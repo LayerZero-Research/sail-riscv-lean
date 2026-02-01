@@ -159,6 +159,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -195,7 +196,7 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_ex739719_ : Bool, k_ex739718_ : Bool -/
+/-- Type quantifiers: k_ex740080_ : Bool, k_ex740079_ : Bool -/
 def neq_bool (x : Bool) (y : Bool) : Bool :=
   (! (x == y))
 

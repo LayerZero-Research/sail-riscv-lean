@@ -159,6 +159,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -226,8 +227,8 @@ def num_of_float_class (arg_ : float_class) : Int :=
   | float_class_snan => 8
   | float_class_qnan => 9
 
-/-- Type quantifiers: k_ex741053_ : Nat, k_ex741053_ ∈ {16, 32, 64, 128} -/
-def float_classify (f : (BitVec k_ex741053_)) : SailM float_class := do
+/-- Type quantifiers: k_ex741414_ : Nat, k_ex741414_ ∈ {16, 32, 64, 128} -/
+def float_classify (f : (BitVec k_ex741414_)) : SailM float_class := do
   if ((float_is_snan f) : Bool)
   then (pure float_class_snan)
   else

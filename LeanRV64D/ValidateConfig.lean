@@ -162,6 +162,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -498,7 +499,7 @@ def check_pmp (_ : Unit) : Bool :=
     valid)
   else valid
 
-/-- Type quantifiers: k_ex856613_ : Bool -/
+/-- Type quantifiers: k_ex857027_ : Bool -/
 def check_required_sstvala_option (name : String) (value : Bool) : Bool :=
   if ((not value) : Bool)
   then

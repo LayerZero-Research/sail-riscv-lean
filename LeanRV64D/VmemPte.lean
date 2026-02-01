@@ -161,6 +161,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -256,7 +257,7 @@ def pte_is_invalid (pte_flags : (BitVec 8)) (pte_ext : (BitVec 10)) : SailM Bool
                     pte_ext) != (zeros (n := 2))) && (not (← (currentlyEnabled Ext_Svrsw60t59b)))) || ((_get_PTE_Ext_reserved
                   pte_ext) != (zeros (n := 5)))))))))
 
-/-- Type quantifiers: k_ex757143_ : Bool, k_ex757142_ : Bool -/
+/-- Type quantifiers: k_ex757529_ : Bool, k_ex757528_ : Bool -/
 def check_PTE_permission (access : (MemoryAccessType mem_payload)) (priv : Privilege) (mxr : Bool) (do_sum : Bool) (pte_flags : (BitVec 8)) (_ext : (BitVec 10)) (_ext_ptw : Unit) : SailM PTE_Check := do
   let pte_U := (bit_to_bool (_get_PTE_Flags_U pte_flags))
   let pte_R := (bit_to_bool (_get_PTE_Flags_R pte_flags))

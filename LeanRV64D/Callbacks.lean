@@ -157,6 +157,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -223,7 +224,7 @@ def csr_full_read_callback (x_0 : String) (x_1 : (BitVec 12)) (x_2 : (BitVec 64)
 def redirect_callback (x_0 : (BitVec 64)) : Unit :=
   ()
 
-/-- Type quantifiers: k_ex752806_ : Bool -/
+/-- Type quantifiers: k_ex753192_ : Bool -/
 def trap_callback (x_0 : Bool) (x_1 : (BitVec 6)) : Unit :=
   ()
 

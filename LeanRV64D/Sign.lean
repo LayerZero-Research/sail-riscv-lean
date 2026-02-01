@@ -155,6 +155,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -191,11 +192,11 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_ex740648_ : Nat, k_ex740648_ ∈ {16, 32, 64, 128} -/
-def float_is_positive (op : (BitVec k_ex740648_)) : Bool :=
+/-- Type quantifiers: k_ex741009_ : Nat, k_ex741009_ ∈ {16, 32, 64, 128} -/
+def float_is_positive (op : (BitVec k_ex741009_)) : Bool :=
   (is_highest_zero op)
 
-/-- Type quantifiers: k_ex740650_ : Nat, k_ex740650_ ∈ {16, 32, 64, 128} -/
-def float_is_negative (op : (BitVec k_ex740650_)) : Bool :=
+/-- Type quantifiers: k_ex741011_ : Nat, k_ex741011_ ∈ {16, 32, 64, 128} -/
+def float_is_negative (op : (BitVec k_ex741011_)) : Bool :=
   (is_highest_one op)
 

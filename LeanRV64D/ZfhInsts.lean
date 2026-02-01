@@ -157,6 +157,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -252,7 +253,7 @@ def f_is_NaN_H (xf16 : (BitVec 16)) : Bool :=
   let (sign, exp, mant) := (fsplit_H xf16)
   ((exp == (ones (n := 5))) && (mant != (zeros (n := 10))))
 
-/-- Type quantifiers: k_ex758630_ : Bool -/
+/-- Type quantifiers: k_ex759016_ : Bool -/
 def fle_H (v1 : (BitVec 16)) (v2 : (BitVec 16)) (is_quiet : Bool) : (Bool × (BitVec 5)) :=
   let (s1, e1, m1) := (fsplit_H v1)
   let (s2, e2, m2) := (fsplit_H v2)

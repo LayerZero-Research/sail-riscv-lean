@@ -165,6 +165,7 @@ open brop_zbb
 open breakpoint_cause
 open bop
 open biop_zbs
+open biop
 open barrier_kind
 open amoop
 open agtype
@@ -783,6 +784,11 @@ def amo_mnemonic_forwards (arg_ : amoop) : String :=
   | AMOMAXU => "amomaxu"
   | AMOCAS => "amocas"
 
+def bitype_mnemonic_forwards (arg_ : biop) : String :=
+  match arg_ with
+  | BEQI => "beqi"
+  | BNEI => "bnei"
+
 def btype_mnemonic_forwards (arg_ : bop) : String :=
   match arg_ with
   | BEQ => "beq"
@@ -1245,6 +1251,7 @@ def hartSupports (merge_var : extension) : Bool :=
   | Ext_S => true
   | Ext_U => true
   | Ext_H => false
+  | Ext_Zibi => ((sys_enable_experimental_extensions ()) && (true : Bool))
   | Ext_Zic64b => true
   | Ext_Zicbom => true
   | Ext_Zicbop => true
@@ -1482,7 +1489,7 @@ def itype_mnemonic_forwards (arg_ : iop) : String :=
   | ORI => "ori"
   | ANDI => "andi"
 
-/-- Type quantifiers: k_ex742401_ : Bool -/
+/-- Type quantifiers: k_ex742767_ : Bool -/
 def maybe_u_forwards (arg_ : Bool) : String :=
   match arg_ with
   | true => "u"
@@ -4643,6 +4650,29 @@ def assembly_forwards (arg_ : instruction) : SailM String := do
             (String.append (opt_spc_forwards ())
               (String.append (← (reg_name_forwards rs1))
                 (String.append (opt_spc_forwards ()) (String.append ")" ""))))))))
+  | .BITYPE (imm, 0b00000, rs1, op) =>
+    (pure (String.append (bitype_mnemonic_forwards op)
+        (String.append (spc_forwards ())
+          (String.append (← (reg_name_forwards rs1))
+            (String.append (sep_forwards ())
+              (String.append "-1"
+                (String.append (sep_forwards ())
+                  (String.append (← (hex_bits_signed_13_forwards imm)) ""))))))))
+  | .BITYPE (imm, cimm, rs1, op) =>
+    (do
+      if ((cimm != 0b00000#5) : Bool)
+      then
+        (pure (String.append (bitype_mnemonic_forwards op)
+            (String.append (spc_forwards ())
+              (String.append (← (reg_name_forwards rs1))
+                (String.append (sep_forwards ())
+                  (String.append (← (hex_bits_5_forwards cimm))
+                    (String.append (sep_forwards ())
+                      (String.append (← (hex_bits_signed_13_forwards imm)) ""))))))))
+      else
+        (do
+          assert false "Pattern match failure at unknown location"
+          throw Error.Exit))
   | .ZICBOZ rs1 =>
     (pure (String.append "cbo.zero"
         (String.append (spc_forwards ())
@@ -5117,6 +5147,11 @@ def assembly_forwards_matches (arg_ : instruction) : Bool :=
   | .WRS WRS_NTO => true
   | .ZICOND_RTYPE (rs2, rs1, rd, op) => true
   | .ZICBOM (cbop, rs1) => true
+  | .BITYPE (imm, 0b00000, rs1, op) => true
+  | .BITYPE (imm, cimm, rs1, op) =>
+    (if ((cimm != 0b00000#5) : Bool)
+    then true
+    else false)
   | .ZICBOZ rs1 => true
   | .FENCEI (0x000, rs, rd) =>
     (if (((rs == zreg) && (rd == zreg)) : Bool)
@@ -5564,6 +5599,7 @@ def currentlyEnabled (merge_var : extension) : SailM Bool := do
   | Ext_Zicond => (pure (hartSupports Ext_Zicond))
   | Ext_Zicntr => (pure ((hartSupports Ext_Zicntr) && (← (currentlyEnabled Ext_Zicsr))))
   | Ext_Zicbom => (pure (hartSupports Ext_Zicbom))
+  | Ext_Zibi => (pure (hartSupports Ext_Zibi))
   | Ext_Zicboz => (pure (hartSupports Ext_Zicboz))
   | Ext_Zifencei => (pure (hartSupports Ext_Zifencei))
   | Ext_Ssqosid => (pure ((hartSupports Ext_Ssqosid) && (← (currentlyEnabled Ext_Zicsr))))
@@ -5748,6 +5784,11 @@ def encdec_amoop_forwards (arg_ : amoop) : (BitVec 5) :=
   | AMOMINU => 0b11000#5
   | AMOMAXU => 0b11100#5
   | AMOCAS => 0b00101#5
+
+def encdec_biop_forwards (arg_ : biop) : (BitVec 3) :=
+  match arg_ with
+  | BEQI => 0b010#3
+  | BNEI => 0b011#3
 
 def encdec_bop_forwards (arg_ : bop) : (BitVec 3) :=
   match arg_ with
@@ -6433,7 +6474,7 @@ def lrsc_width_valid (width : Nat) : Bool :=
 def validDoubleRegs {n : _} (regs : (Vector fregidx n)) : Bool :=
   true
 
-/-- Type quantifiers: k_ex744560_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
+/-- Type quantifiers: k_ex744940_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
 def valid_load_encdec (width : Nat) (is_unsigned : Bool) : Bool :=
   ((width <b xlen_bytes) || ((not is_unsigned) && (width ≤b xlen_bytes)))
 
@@ -10365,6 +10406,19 @@ noncomputable def encdec_forwards (arg_ : instruction) : SailM (BitVec 32) := do
         (do
           assert false "Pattern match failure at unknown location"
           throw Error.Exit))
+  | .BITYPE (v__18, cimm, rs1, op) =>
+    (do
+      if (((← (currentlyEnabled Ext_Zibi)) && ((Sail.BitVec.extractLsb v__18 0 0) == (0#1 : (BitVec 1)))) : Bool)
+      then
+        (let imm := (Sail.BitVec.extractLsb v__18 12 1)
+        let imm := (Sail.BitVec.extractLsb v__18 12 1)
+        (pure ((Sail.BitVec.extractLsb imm 11 11) ++ ((Sail.BitVec.extractLsb imm 9 4) ++ ((cimm : (BitVec 5)) ++ ((encdec_reg_forwards
+                    rs1) ++ ((encdec_biop_forwards op) ++ ((Sail.BitVec.extractLsb imm 3 0) ++ ((Sail.BitVec.extractLsb
+                          imm 10 10) ++ 0b1100011#7)))))))))
+      else
+        (do
+          assert false "Pattern match failure at unknown location"
+          throw Error.Exit))
   | .ZICBOZ rs1 =>
     (do
       if ((← (currentlyEnabled Ext_Zicboz)) : Bool)
@@ -10440,27 +10494,27 @@ noncomputable def encdec_forwards (arg_ : instruction) : SailM (BitVec 32) := do
         (do
           assert false "Pattern match failure at unknown location"
           throw Error.Exit))
-  | .ZIMOP_MOP_R (v__18, rs1, rd) =>
+  | .ZIMOP_MOP_R (v__20, rs1, rd) =>
     (do
       if ((← (currentlyEnabled Ext_Zimop)) : Bool)
       then
-        (let mop_30 : (BitVec 1) := (Sail.BitVec.extractLsb v__18 4 4)
-        let mop_30 : (BitVec 1) := (Sail.BitVec.extractLsb v__18 4 4)
-        let mop_27_26 : (BitVec 2) := (Sail.BitVec.extractLsb v__18 3 2)
-        let mop_21_20 : (BitVec 2) := (Sail.BitVec.extractLsb v__18 1 0)
+        (let mop_30 : (BitVec 1) := (Sail.BitVec.extractLsb v__20 4 4)
+        let mop_30 : (BitVec 1) := (Sail.BitVec.extractLsb v__20 4 4)
+        let mop_27_26 : (BitVec 2) := (Sail.BitVec.extractLsb v__20 3 2)
+        let mop_21_20 : (BitVec 2) := (Sail.BitVec.extractLsb v__20 1 0)
         (pure (1#1 ++ ((mop_30 : (BitVec 1)) ++ (0b00#2 ++ ((mop_27_26 : (BitVec 2)) ++ (0b0111#4 ++ ((mop_21_20 : (BitVec 2)) ++ ((encdec_reg_forwards
                           rs1) ++ (0b100#3 ++ ((encdec_reg_forwards rd) ++ 0b1110011#7)))))))))))
       else
         (do
           assert false "Pattern match failure at unknown location"
           throw Error.Exit))
-  | .ZIMOP_MOP_RR (v__19, rs2, rs1, rd) =>
+  | .ZIMOP_MOP_RR (v__21, rs2, rs1, rd) =>
     (do
       if ((← (currentlyEnabled Ext_Zimop)) : Bool)
       then
-        (let mop_30 : (BitVec 1) := (Sail.BitVec.extractLsb v__19 2 2)
-        let mop_30 : (BitVec 1) := (Sail.BitVec.extractLsb v__19 2 2)
-        let mop_27_26 : (BitVec 2) := (Sail.BitVec.extractLsb v__19 1 0)
+        (let mop_30 : (BitVec 1) := (Sail.BitVec.extractLsb v__21 2 2)
+        let mop_30 : (BitVec 1) := (Sail.BitVec.extractLsb v__21 2 2)
+        let mop_27_26 : (BitVec 2) := (Sail.BitVec.extractLsb v__21 1 0)
         (pure (1#1 ++ ((mop_30 : (BitVec 1)) ++ (0b00#2 ++ ((mop_27_26 : (BitVec 2)) ++ (1#1 ++ ((encdec_reg_forwards
                         rs2) ++ ((encdec_reg_forwards rs1) ++ (0b100#3 ++ ((encdec_reg_forwards rd) ++ 0b1110011#7)))))))))))
       else
