@@ -339,9 +339,9 @@ def num_of_CSRAccessType (arg_ : CSRAccessType) : Int :=
 
 def undefined_InterruptType (_ : Unit) : SailM InterruptType := do
   (internal_pick
-    [I_Reserved_0, I_S_Software, I_VS_Software, I_M_Software, I_Reserved_4, I_S_Timer, I_VS_Timer, I_M_Timer, I_Reserved_8, I_S_External, I_VS_External, I_M_External, I_SG_External])
+    [I_Reserved_0, I_S_Software, I_VS_Software, I_M_Software, I_Reserved_4, I_S_Timer, I_VS_Timer, I_M_Timer, I_Reserved_8, I_S_External, I_VS_External, I_M_External, I_SG_External, I_COF])
 
-/-- Type quantifiers: arg_ : Nat, 0 ≤ arg_ ∧ arg_ ≤ 12 -/
+/-- Type quantifiers: arg_ : Nat, 0 ≤ arg_ ∧ arg_ ≤ 13 -/
 def InterruptType_of_num (arg_ : Nat) : InterruptType :=
   match arg_ with
   | 0 => I_Reserved_0
@@ -356,7 +356,8 @@ def InterruptType_of_num (arg_ : Nat) : InterruptType :=
   | 9 => I_S_External
   | 10 => I_VS_External
   | 11 => I_M_External
-  | _ => I_SG_External
+  | 12 => I_SG_External
+  | _ => I_COF
 
 def num_of_InterruptType (arg_ : InterruptType) : Int :=
   match arg_ with
@@ -373,6 +374,7 @@ def num_of_InterruptType (arg_ : InterruptType) : Int :=
   | I_VS_External => 10
   | I_M_External => 11
   | I_SG_External => 12
+  | I_COF => 13
 
 def interruptType_bits_forwards (arg_ : InterruptType) : (BitVec 6) :=
   match arg_ with
@@ -389,6 +391,7 @@ def interruptType_bits_forwards (arg_ : InterruptType) : (BitVec 6) :=
   | I_VS_External => 0b001010#6
   | I_M_External => 0b001011#6
   | I_SG_External => 0b001100#6
+  | I_COF => 0b001101#6
 
 def interruptType_bits_backwards (arg_ : (BitVec 6)) : SailM InterruptType := do
   match arg_ with
@@ -405,6 +408,7 @@ def interruptType_bits_backwards (arg_ : (BitVec 6)) : SailM InterruptType := do
   | 0b001010 => (pure I_VS_External)
   | 0b001011 => (pure I_M_External)
   | 0b001100 => (pure I_SG_External)
+  | 0b001101 => (pure I_COF)
   | _ =>
     (do
       assert false "Pattern match failure at unknown location"
@@ -425,6 +429,7 @@ def interruptType_bits_forwards_matches (arg_ : InterruptType) : Bool :=
   | I_VS_External => true
   | I_M_External => true
   | I_SG_External => true
+  | I_COF => true
 
 def interruptType_bits_backwards_matches (arg_ : (BitVec 6)) : Bool :=
   match arg_ with
@@ -441,6 +446,7 @@ def interruptType_bits_backwards_matches (arg_ : (BitVec 6)) : Bool :=
   | 0b001010 => true
   | 0b001011 => true
   | 0b001100 => true
+  | 0b001101 => true
   | _ => false
 
 def undefined_breakpoint_cause (_ : Unit) : SailM breakpoint_cause := do

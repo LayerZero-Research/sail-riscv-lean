@@ -1489,7 +1489,7 @@ def itype_mnemonic_forwards (arg_ : iop) : String :=
   | ORI => "ori"
   | ANDI => "andi"
 
-/-- Type quantifiers: k_ex742767_ : Bool -/
+/-- Type quantifiers: k_ex742851_ : Bool -/
 def maybe_u_forwards (arg_ : Bool) : String :=
   match arg_ with
   | true => "u"
@@ -6474,7 +6474,7 @@ def lrsc_width_valid (width : Nat) : Bool :=
 def validDoubleRegs {n : _} (regs : (Vector fregidx n)) : Bool :=
   true
 
-/-- Type quantifiers: k_ex744940_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
+/-- Type quantifiers: k_ex745024_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
 def valid_load_encdec (width : Nat) (is_unsigned : Bool) : Bool :=
   ((width <b xlen_bytes) || ((not is_unsigned) && (width ≤b xlen_bytes)))
 
@@ -10547,6 +10547,7 @@ def interruptType_to_str (i : InterruptType) : String :=
   | I_VS_External => "virtual-supervisor-external-interrupt"
   | I_M_External => "machine-external-interrupt"
   | I_SG_External => "supervisor guest-external-interrupt"
+  | I_COF => "counter-overflow interrupt"
 
 def misaligned_fault_str_backwards (arg_ : String) : SailM misaligned_fault := do
   match arg_ with

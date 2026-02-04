@@ -1131,7 +1131,7 @@ inductive stateen_bit where | STATEEN_FCSR | STATEEN_SRMCFG | STATEEN_ENVCFG | S
 
 abbrev Vtype := (BitVec 64)
 
-inductive InterruptType where | I_Reserved_0 | I_S_Software | I_VS_Software | I_M_Software | I_Reserved_4 | I_S_Timer | I_VS_Timer | I_M_Timer | I_Reserved_8 | I_S_External | I_VS_External | I_M_External | I_SG_External
+inductive InterruptType where | I_Reserved_0 | I_S_Software | I_VS_Software | I_M_Software | I_Reserved_4 | I_S_Timer | I_VS_Timer | I_M_Timer | I_Reserved_8 | I_S_External | I_VS_External | I_M_External | I_SG_External | I_COF
   deriving BEq, Inhabited, Repr
   open InterruptType
 

@@ -234,7 +234,7 @@ def encdec_csrop_backwards_matches (arg_ : (BitVec 2)) : Bool :=
   | 0b11 => true
   | _ => false
 
-/-- Type quantifiers: k_ex761958_ : Bool, k_ex761957_ : Bool -/
+/-- Type quantifiers: k_ex762053_ : Bool, k_ex762052_ : Bool -/
 def csr_access_type (op : csrop) (rd_is_x0 : Bool) (rs1_imm_is_zero : Bool) : CSRAccessType :=
   match (op, rd_is_x0, rs1_imm_is_zero) with
   | (CSRRW, true, _) => CSRWrite
@@ -19862,7 +19862,7 @@ def write_CSR (arg0 : (BitVec 12)) (arg1 : (BitVec 64)) : SailM (Result (BitVec 
                                                             (BitVec.toFormatted v__3790))))))))))))))))
   | (0x303, value) =>
     (do
-      writeReg mideleg (legalize_mideleg (← readReg mideleg) value)
+      writeReg mideleg (← (legalize_mideleg (← readReg mideleg) value))
       (pure (Ok (← readReg mideleg))))
   | (0x342, value) =>
     (do
