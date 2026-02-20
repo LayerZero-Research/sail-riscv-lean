@@ -204,11 +204,17 @@ def not_implemented (message : String) : SailM k_a := do
 
 /-- Type quantifiers: line : Int, k_a : Type -/
 def internal_error (file : String) (line : Int) (s : String) : SailM k_a := do
-  assert false (HAppend.hAppend file
-    (HAppend.hAppend ":" (HAppend.hAppend (Int.repr line) (HAppend.hAppend ": " s))))
-  throw Error.Exit
+  sailThrow ((Error_internal_error
+    (HAppend.hAppend file
+      (HAppend.hAppend ":" (HAppend.hAppend (Int.repr line) (HAppend.hAppend ": " s))))))
 
 /-- Type quantifiers: k_a : Type -/
 def reserved_behavior (message : String) : SailM k_a := do
-  sailThrow ((Error_reserved_behavior (HAppend.hAppend "Reserved behavior: " message)))
+  sailThrow ((Error_reserved_behavior message))
+
+def print_exception (e : exception) : Unit :=
+  match e with
+  | .Error_not_implemented s => (print_endline (HAppend.hAppend "Not implemented error: " s))
+  | .Error_internal_error s => (print_endline (HAppend.hAppend "Internal error: " s))
+  | .Error_reserved_behavior s => (print_endline (HAppend.hAppend "Fatal reserved behavior: " s))
 

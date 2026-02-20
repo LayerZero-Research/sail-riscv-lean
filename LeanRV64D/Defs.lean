@@ -82,7 +82,7 @@ abbrev mem_access_width := Nat
 
 inductive exception where
   | Error_not_implemented (_ : String)
-  | Error_internal_error (_ : Unit)
+  | Error_internal_error (_ : String)
   | Error_reserved_behavior (_ : String)
   deriving Inhabited, BEq, Repr
   open exception

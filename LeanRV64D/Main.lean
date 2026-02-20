@@ -203,7 +203,7 @@ def sail_main (_ : Unit) : SailM Unit := do
       (cycle_count ())
       (loop ()))) (fun the_exception => 
     match the_exception with
-      | .Error_not_implemented s => (pure (print_string "Error: Not implemented: " s))
-      | .Error_internal_error () => (pure (print "Error: internal error"))
-      | e => sailThrow (e))
+      | .Error_not_implemented s => (pure (print_string "Error: not implemented: " s))
+      | .Error_internal_error s => (pure (print_string "Error: internal error: " s))
+      | .Error_reserved_behavior s => (pure (print_string "Error: reserved behavior: " s)))
 
