@@ -196,7 +196,7 @@ open Architecture
 open AmocasOddRegisterReservedBehavior
 
 def xt2 (x : (BitVec 8)) : (BitVec 8) :=
-  ((shiftl x 1) ^^^ (if ((bit_to_bool (BitVec.access x 7)) : Bool)
+  ((x <<< 1) ^^^ (if ((bit_to_bool (BitVec.access x 7)) : Bool)
     then 0x1B#8
     else 0x00#8))
 

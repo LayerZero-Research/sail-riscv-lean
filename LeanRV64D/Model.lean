@@ -3,7 +3,6 @@ import LeanRV64D.Regs
 import LeanRV64D.SysRegs
 import LeanRV64D.ZicfilpRegs
 import LeanRV64D.SysControl
-import LeanRV64D.Platform
 import LeanRV64D.Vmem
 import LeanRV64D.StepExt
 import LeanRV64D.Step
@@ -215,7 +214,6 @@ def init_model (config_filename : String) : SailM Unit := do
     (if ((config_filename == "") : Bool)
     then "Default config"
     else (HAppend.hAppend "Config in " config_filename)) " is invalid.")
-  (init_platform ())
   (reset ())
 
 def init_boot_requirements (_ : Unit) : SailM Unit := do

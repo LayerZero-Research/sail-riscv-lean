@@ -326,7 +326,7 @@ def rvfi_get_v2_trace_size (_ : Unit) : SailM (BitVec 64) := do
     if ((← readReg rvfi_mem_data_present) : Bool)
     then (pure (BitVec.addInt trace_size 704))
     else (pure trace_size)
-  (pure (shiftr trace_size 3))
+  (pure (trace_size >>> 3))
 
 def rvfi_get_exec_packet_v2 (_ : Unit) : SailM (BitVec 512) := do
   let packet := (Mk_RVFI_DII_Execution_PacketV2 (zeros (n := 512)))

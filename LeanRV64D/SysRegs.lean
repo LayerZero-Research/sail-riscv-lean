@@ -1235,7 +1235,7 @@ def tvec_addr (m : (BitVec 64)) (c : (BitVec 64)) : (Option (BitVec 64)) :=
   | TV_Direct => (some base)
   | TV_Vector =>
     (if (((_get_Mcause_IsInterrupt c) == 1#1) : Bool)
-    then (some (base + (shiftl (zero_extend (m := 64) (_get_Mcause_Cause c)) 2)))
+    then (some (base + ((zero_extend (m := 64) (_get_Mcause_Cause c)) <<< 2)))
     else (some base))
   | TV_Reserved => none
 

@@ -359,11 +359,6 @@ def initialize_registers (_ : Unit) : SailM Unit := do
   writeReg elp (← (undefined_bitvector 1))
   writeReg mtimecmp (← (undefined_bitvector 64))
   writeReg stimecmp (← (undefined_bitvector 64))
-  writeReg htif_tohost (← (undefined_bitvector 64))
-  writeReg htif_done (← (undefined_bool ()))
-  writeReg htif_exit_code (← (undefined_bitvector 64))
-  writeReg htif_cmd_write (← (undefined_bitvector 1))
-  writeReg htif_payload_writes (← (undefined_bitvector 4))
   writeReg satp (← (undefined_bitvector 64))
   writeReg mhpmevent (← (undefined_vector 32 (← (undefined_HpmEvent ()))))
   writeReg mhpmcounter (← (undefined_vector 32 (← (undefined_bitvector 64))))
@@ -403,6 +398,11 @@ def sail_model_init (x_0 : Unit) : SailM Unit := do
   writeReg mconfigptr (zeros (n := 64))
   writeReg pc_reset_address (zeros (n := 64))
   writeReg htif_tohost_base none
+  writeReg htif_tohost (zeros (n := 64))
+  writeReg htif_done false
+  writeReg htif_exit_code (zeros (n := 64))
+  writeReg htif_cmd_write (zeros (n := 1))
+  writeReg htif_payload_writes (zeros (n := 4))
   writeReg pma_regions [{ base := 0b0000000000000000000000000000000000000000000000000001000000000000#64
                           size := 0b0000000000000000000000000000000000000000000000000001000000000000#64
                           attributes := { cacheable := true

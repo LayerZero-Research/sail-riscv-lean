@@ -212,14 +212,14 @@ def num_of_zvk_vsha2_funct6 (arg_ : zvk_vsha2_funct6) : Int :=
 /-- Type quantifiers: SEW : Nat, SEW ≥ 0, SEW ∈ {32, 64} -/
 def zvk_sig0 (x : (BitVec k_n)) (SEW : Nat) : (BitVec SEW) :=
   match SEW with
-  | 32 => ((rotater x 7) ^^^ ((rotater x 18) ^^^ (shiftr x 3)))
-  | _ => ((rotater x 1) ^^^ ((rotater x 8) ^^^ (shiftr x 7)))
+  | 32 => ((rotater x 7) ^^^ ((rotater x 18) ^^^ (x >>> 3)))
+  | _ => ((rotater x 1) ^^^ ((rotater x 8) ^^^ (x >>> 7)))
 
 /-- Type quantifiers: SEW : Nat, SEW ≥ 0, SEW ∈ {32, 64} -/
 def zvk_sig1 (x : (BitVec k_n)) (SEW : Nat) : (BitVec SEW) :=
   match SEW with
-  | 32 => ((rotater x 17) ^^^ ((rotater x 19) ^^^ (shiftr x 10)))
-  | _ => ((rotater x 19) ^^^ ((rotater x 61) ^^^ (shiftr x 6)))
+  | 32 => ((rotater x 17) ^^^ ((rotater x 19) ^^^ (x >>> 10)))
+  | _ => ((rotater x 19) ^^^ ((rotater x 61) ^^^ (x >>> 6)))
 
 /-- Type quantifiers: SEW : Nat, SEW ≥ 0, SEW ∈ {32, 64} -/
 def zvk_sum0 (x : (BitVec k_n)) (SEW : Nat) : (BitVec SEW) :=

@@ -221,7 +221,7 @@ def fcvtmod_helper (x64 : (BitVec 64)) : ((BitVec 5) × (BitVec 32)) :=
           (if (is_too_small : Bool)
           then ((nxFlag ()), (zeros (n := 32)))
           else
-            (let fixedpoint : (BitVec 84) := (shiftl (zero_extend (m := 84) true_mant) true_exp)
+            (let fixedpoint : (BitVec 84) := ((zero_extend (m := 84) true_mant) <<< true_exp)
             let integer := (Sail.BitVec.extractLsb fixedpoint 83 52)
             let fractional := (Sail.BitVec.extractLsb fixedpoint 51 0)
             let result :=

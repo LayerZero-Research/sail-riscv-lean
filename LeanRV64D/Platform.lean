@@ -352,7 +352,7 @@ def clint_load (access : (MemoryAccessType mem_payload)) (app_1 : physaddr) (wid
                               else ()
                             (pure (Err (accessFaultFromAccessType access))))))))))
 
-/-- Type quantifiers: k_ex791417_ : Bool -/
+/-- Type quantifiers: k_ex791267_ : Bool -/
 def clint_dispatch (mip_was_written : Bool) : SailM Unit := do
   let old_mip ← do readReg mip
   writeReg mip (Sail.BitVec.updateSubrange (← readReg mip) 7 7
@@ -657,7 +657,7 @@ def htif_store (app_0 : physaddr) (width : Nat) (data : (BitVec (8 * width))) : 
           then
             (do
               writeReg htif_done true
-              writeReg htif_exit_code (shiftr (zero_extend (m := 64) (_get_htif_cmd_payload cmd)) 1))
+              writeReg htif_exit_code ((zero_extend (m := 64) (_get_htif_cmd_payload cmd)) >>> 1))
           else (pure ()))
       | 0x01 =>
         (do
@@ -709,14 +709,4 @@ def mmio_write (paddr : physaddr) (width : Nat) (data : (BitVec (8 * width))) : 
       if ((← (within_htif_writable paddr width)) : Bool)
       then (htif_store paddr width data)
       else (pure (Err (E_SAMO_Access_Fault ()))))
-
-def init_platform (_ : Unit) : SailM Unit := do
-  writeReg htif_tohost (zeros (n := 64))
-  writeReg htif_done false
-  writeReg htif_exit_code (zeros (n := 64))
-  writeReg htif_cmd_write 0#1
-  writeReg htif_payload_writes (zeros (n := 4))
-
-def platform_wfi (_ : Unit) : Unit :=
-  ()
 

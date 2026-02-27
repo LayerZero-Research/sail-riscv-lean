@@ -671,9 +671,9 @@ def read_vreg_seg (num_elem : Nat) (SEW : Nat) (LMUL_pow : Int) (nf : Nat) (vrid
         let result := loop_vars_2
         loop_vars_2 :=
           (vectorUpdate result i
-            ((GetElem?.getElem! result i) ||| (shiftl
-                (zero_extend (m := ((Vector.length vreg_list) *i SEW))
-                  (GetElem?.getElem! (GetElem?.getElem! vreg_list j) i)) (j *i SEW))))
+            ((GetElem?.getElem! result i) ||| ((zero_extend
+                  (m := ((Vector.length vreg_list) *i SEW))
+                  (GetElem?.getElem! (GetElem?.getElem! vreg_list j) i)) <<< (j *i SEW))))
       (pure loop_vars_2)
   (pure loop_vars_1)
 

@@ -261,9 +261,9 @@ def generate_dts_memories (pmas : (List PMA_Region)) : String :=
   | (pma :: rest) =>
     (if (pma.include_in_device_tree : Bool)
     then
-      (let base_hi := (BitVec.toNatInt (shiftr pma.base 32))
+      (let base_hi := (BitVec.toNatInt (pma.base >>> 32))
       let base_lo := (BitVec.toNatInt (Sail.BitVec.extractLsb pma.base 31 0))
-      let size_hi := (BitVec.toNatInt (shiftr pma.size 32))
+      let size_hi := (BitVec.toNatInt (pma.size >>> 32))
       let size_lo := (BitVec.toNatInt (Sail.BitVec.extractLsb pma.size 31 0))
       (HAppend.hAppend "  memory@"
         (HAppend.hAppend (String.dropStr (Int.toHex (BitVec.toNatInt pma.base)) 2)
@@ -287,9 +287,9 @@ def generate_dts_memories (pmas : (List PMA_Region)) : String :=
 
 def generate_dts (_ : Unit) : SailM String := do
   let clock_freq : Nat := 1000000000
-  let clint_base_hi := (BitVec.toNatInt (shiftr plat_clint_base 32))
+  let clint_base_hi := (BitVec.toNatInt (plat_clint_base >>> 32))
   let clint_base_lo := (BitVec.toNatInt (Sail.BitVec.extractLsb plat_clint_base 31 0))
-  let clint_size_hi := (BitVec.toNatInt (shiftr plat_clint_size 32))
+  let clint_size_hi := (BitVec.toNatInt (plat_clint_size >>> 32))
   let clint_size_lo := (BitVec.toNatInt (Sail.BitVec.extractLsb plat_clint_size 31 0))
   (pure (HAppend.hAppend "/dts-v1/;
 "

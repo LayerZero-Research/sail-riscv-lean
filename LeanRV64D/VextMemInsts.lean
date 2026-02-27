@@ -372,7 +372,7 @@ def process_vlseg (nf : Nat) (vm : (BitVec 1)) (vd : vregidx) (load_width_bytes 
             loop_vars_1 ← do
               let skipped_elem :=
                 (Sail.BitVec.extractLsb
-                  (shiftr (GetElem?.getElem! result i) ((j *i load_width_bytes) *i 8))
+                  ((GetElem?.getElem! result i) >>> ((j *i load_width_bytes) *i 8))
                   ((load_width_bytes *i 8) -i 1) 0)
               (write_single_element (load_width_bytes *i 8) i
                 (vregidx_offset vd (to_bits_unsafe (l := 5) (j *i EMUL_reg))) skipped_elem)
@@ -446,7 +446,7 @@ def process_vlsegff (nf : Nat) (vm : (BitVec 1)) (vd : vregidx) (load_width_byte
                   loop_vars_2 ← do
                     let skipped_elem :=
                       (Sail.BitVec.extractLsb
-                        (shiftr (GetElem?.getElem! result i) ((j *i load_width_bytes) *i 8))
+                        ((GetElem?.getElem! result i) >>> ((j *i load_width_bytes) *i 8))
                         ((load_width_bytes *i 8) -i 1) 0)
                     (write_single_element (load_width_bytes *i 8) i
                       (vregidx_offset vd (to_bits_unsafe (l := 5) (j *i EMUL_reg))) skipped_elem)
@@ -465,7 +465,7 @@ def process_vlsegff (nf : Nat) (vm : (BitVec 1)) (vd : vregidx) (load_width_byte
                   loop_vars_1 ← do
                     let skipped_elem :=
                       (Sail.BitVec.extractLsb
-                        (shiftr (GetElem?.getElem! vd_seg i) ((j *i load_width_bytes) *i 8))
+                        ((GetElem?.getElem! vd_seg i) >>> ((j *i load_width_bytes) *i 8))
                         ((load_width_bytes *i 8) -i 1) 0)
                     (write_single_element (load_width_bytes *i 8) i
                       (vregidx_offset vd (to_bits_unsafe (l := 5) (j *i EMUL_reg))) skipped_elem)
@@ -574,7 +574,7 @@ def process_vlsseg (nf : Nat) (vm : (BitVec 1)) (vd : vregidx) (load_width_bytes
             loop_vars_1 ← do
               let skipped_elem :=
                 (Sail.BitVec.extractLsb
-                  (shiftr (GetElem?.getElem! result i) ((j *i load_width_bytes) *i 8))
+                  ((GetElem?.getElem! result i) >>> ((j *i load_width_bytes) *i 8))
                   ((load_width_bytes *i 8) -i 1) 0)
               (write_single_element (load_width_bytes *i 8) i
                 (vregidx_offset vd (to_bits_unsafe (l := 5) (j *i EMUL_reg))) skipped_elem)
@@ -685,7 +685,7 @@ def process_vlxseg (nf : Nat) (vm : (BitVec 1)) (vd : vregidx) (EEW_index_bytes 
             loop_vars_1 ← do
               let skipped_elem :=
                 (Sail.BitVec.extractLsb
-                  (shiftr (GetElem?.getElem! result i) ((j *i EEW_data_bytes) *i 8))
+                  ((GetElem?.getElem! result i) >>> ((j *i EEW_data_bytes) *i 8))
                   ((EEW_data_bytes *i 8) -i 1) 0)
               (write_single_element (EEW_data_bytes *i 8) i
                 (vregidx_offset vd (to_bits_unsafe (l := 5) (j *i EMUL_data_reg))) skipped_elem)

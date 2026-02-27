@@ -1164,7 +1164,7 @@ def rvfi_get_mem_data (_ : Unit) : SailM (BitVec 704) := do
 
 /-- Type quantifiers: width : Nat, 0 < width ∧ width ≤ 32 -/
 def rvfi_encode_width_mask (width : Nat) : (BitVec 32) :=
-  (shiftr 0xFFFFFFFF#32 (32 -i width))
+  (0xFFFFFFFF#32 >>> (32 -i width))
 
 def print_rvfi_exec (_ : Unit) : SailM Unit := do
   (pure (print_bits "rvfi_intr     : "

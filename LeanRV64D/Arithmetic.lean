@@ -218,7 +218,7 @@ def carryless_mul (a : (BitVec k_n)) (b : (BitVec k_n)) : (BitVec (2 * k_n)) := 
     let result := loop_vars
     loop_vars :=
       if (((BitVec.access a i) == 1#1) : Bool)
-      then (result ^^^ (shiftl (zero_extend (m := (2 *i (Sail.BitVec.length b))) b) i))
+      then (result ^^^ ((zero_extend (m := (2 *i (Sail.BitVec.length b))) b) <<< i))
       else result
   (pure loop_vars)
 
@@ -232,7 +232,7 @@ def carryless_mulr (a : (BitVec k_n)) (b : (BitVec k_n)) : (BitVec k_n) := Id.ru
     let result := loop_vars
     loop_vars :=
       if (((BitVec.access a i) == 1#1) : Bool)
-      then (result ^^^ (shiftr b (((Sail.BitVec.length result) -i i) -i 1)))
+      then (result ^^^ (b >>> (((Sail.BitVec.length result) -i i) -i 1)))
       else result
   (pure loop_vars)
 
