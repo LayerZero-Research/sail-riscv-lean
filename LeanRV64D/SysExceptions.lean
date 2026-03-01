@@ -162,6 +162,7 @@ open biop
 open barrier_kind
 open amoop
 open agtype
+open XtvecModeReservedBehavior
 open XenvcfgCbieReservedBehavior
 open WaitReason
 open VectorHalf
@@ -251,10 +252,10 @@ def get_stvec (_ : Unit) : SailM (BitVec 64) := do
   readReg stvec
 
 def set_mtvec (value : (BitVec 64)) : SailM (BitVec 64) := do
-  writeReg mtvec (legalize_tvec (← readReg mtvec) value)
+  writeReg mtvec (← (legalize_tvec (← readReg mtvec) value))
   readReg mtvec
 
 def set_stvec (value : (BitVec 64)) : SailM (BitVec 64) := do
-  writeReg stvec (legalize_tvec (← readReg stvec) value)
+  writeReg stvec (← (legalize_tvec (← readReg stvec) value))
   readReg stvec
 

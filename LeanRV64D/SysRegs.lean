@@ -1,5 +1,6 @@
 import LeanRV64D.Prelude
 import LeanRV64D.Errors
+import LeanRV64D.PlatformConfig
 import LeanRV64D.Extensions
 import LeanRV64D.Types
 import LeanRV64D.Regs
@@ -165,6 +166,7 @@ open biop
 open barrier_kind
 open amoop
 open agtype
+open XtvecModeReservedBehavior
 open XenvcfgCbieReservedBehavior
 open WaitReason
 open VectorHalf
@@ -1196,12 +1198,20 @@ def _set_Satp64_Mode (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) : Sail
   let r ← do (reg_deref r_ref)
   writeRegRef r_ref (_update_Satp64_Mode r v)
 
-def legalize_tvec (o : (BitVec 64)) (v : (BitVec 64)) : (BitVec 64) :=
+def legalize_tvec (o : (BitVec 64)) (v : (BitVec 64)) : SailM (BitVec 64) := do
   let v := (Mk_Mtvec v)
   match (trapVectorMode_of_bits (_get_Mtvec_Mode v)) with
-  | TV_Direct => v
-  | TV_Vector => v
-  | _ => (_update_Mtvec_Mode v (_get_Mtvec_Mode o))
+  | TV_Direct => (pure v)
+  | TV_Vector => (pure v)
+  | _ =>
+    (do
+      match xtvec_mode_reserved_behavior with
+      | Xtvec_Fatal =>
+        (reserved_behavior
+          (HAppend.hAppend "Tried to write a reserved value ("
+            (HAppend.hAppend (Int.repr (BitVec.toNatInt (_get_Mtvec_Mode v)))
+              ") to the MODE field of xtvec.")))
+      | Xtvec_Ignore => (pure (_update_Mtvec_Mode v (_get_Mtvec_Mode o))))
 
 def undefined_Mcause (_ : Unit) : SailM (BitVec 64) := do
   (undefined_bitvector 64)
@@ -1474,8 +1484,8 @@ def feature_enabled_for_priv (p : Privilege) (machine_enable_bit : (BitVec 1)) (
   | User =>
     (pure ((machine_enable_bit == 1#1) && ((not (← (currentlyEnabled Ext_S))) || (supervisor_enable_bit == 1#1))))
   | VirtualSupervisor =>
-    (internal_error "core/sys_regs.sail" 805 "Hypervisor extension not supported")
-  | VirtualUser => (internal_error "core/sys_regs.sail" 806 "Hypervisor extension not supported")
+    (internal_error "core/sys_regs.sail" 808 "Hypervisor extension not supported")
+  | VirtualUser => (internal_error "core/sys_regs.sail" 809 "Hypervisor extension not supported")
 
 /-- Type quantifiers: index : Nat, 0 ≤ index ∧ index ≤ 31 -/
 def counter_enabled (index : Nat) (priv : Privilege) : SailM Bool := do

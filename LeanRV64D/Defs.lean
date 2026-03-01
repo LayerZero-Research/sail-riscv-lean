@@ -186,6 +186,10 @@ inductive XenvcfgCbieReservedBehavior where | Xenvcfg_Fatal | Xenvcfg_ClearPermi
   deriving BEq, Inhabited, Repr
   open XenvcfgCbieReservedBehavior
 
+inductive XtvecModeReservedBehavior where | Xtvec_Fatal | Xtvec_Ignore
+  deriving BEq, Inhabited, Repr
+  open XtvecModeReservedBehavior
+
 inductive RV32ZdinxOddRegisterReservedBehavior where | Zdinx_Fatal | Zdinx_Illegal
   deriving BEq, Inhabited, Repr
   open RV32ZdinxOddRegisterReservedBehavior

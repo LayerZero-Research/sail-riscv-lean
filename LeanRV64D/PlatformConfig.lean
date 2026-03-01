@@ -161,6 +161,7 @@ open biop
 open barrier_kind
 open amoop
 open agtype
+open XtvecModeReservedBehavior
 open XenvcfgCbieReservedBehavior
 open WaitReason
 open VectorHalf
@@ -300,6 +301,20 @@ def num_of_XenvcfgCbieReservedBehavior (arg_ : XenvcfgCbieReservedBehavior) : In
   | Xenvcfg_Fatal => 0
   | Xenvcfg_ClearPermissions => 1
 
+def undefined_XtvecModeReservedBehavior (_ : Unit) : SailM XtvecModeReservedBehavior := do
+  (internal_pick [Xtvec_Fatal, Xtvec_Ignore])
+
+/-- Type quantifiers: arg_ : Nat, 0 ≤ arg_ ∧ arg_ ≤ 1 -/
+def XtvecModeReservedBehavior_of_num (arg_ : Nat) : XtvecModeReservedBehavior :=
+  match arg_ with
+  | 0 => Xtvec_Fatal
+  | _ => Xtvec_Ignore
+
+def num_of_XtvecModeReservedBehavior (arg_ : XtvecModeReservedBehavior) : Int :=
+  match arg_ with
+  | Xtvec_Fatal => 0
+  | Xtvec_Ignore => 1
+
 def undefined_RV32ZdinxOddRegisterReservedBehavior (_ : Unit) : SailM RV32ZdinxOddRegisterReservedBehavior := do
   (internal_pick [Zdinx_Fatal, Zdinx_Illegal])
 
@@ -321,6 +336,8 @@ def fcsr_rm_reserved_behavior : FcsrRmReservedBehavior := Fcsr_RM_Illegal
 def pmp_write_only_reserved_behavior : PmpWriteOnlyReservedBehavior := PMP_ClearPermissions
 
 def xenvcfg_cbie_reserved_behavior : XenvcfgCbieReservedBehavior := Xenvcfg_ClearPermissions
+
+def xtvec_mode_reserved_behavior : XtvecModeReservedBehavior := Xtvec_Ignore
 
 def rv32zdinx_odd_register_reserved_behavior : RV32ZdinxOddRegisterReservedBehavior := Zdinx_Illegal
 

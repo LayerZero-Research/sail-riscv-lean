@@ -170,6 +170,7 @@ open biop
 open barrier_kind
 open amoop
 open agtype
+open XtvecModeReservedBehavior
 open XenvcfgCbieReservedBehavior
 open WaitReason
 open VectorHalf
@@ -352,7 +353,7 @@ def clint_load (access : (MemoryAccessType mem_payload)) (app_1 : physaddr) (wid
                               else ()
                             (pure (Err (accessFaultFromAccessType access))))))))))
 
-/-- Type quantifiers: k_ex791267_ : Bool -/
+/-- Type quantifiers: k_ex791291_ : Bool -/
 def clint_dispatch (mip_was_written : Bool) : SailM Unit := do
   let old_mip ← do readReg mip
   writeReg mip (Sail.BitVec.updateSubrange (← readReg mip) 7 7

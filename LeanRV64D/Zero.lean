@@ -161,6 +161,7 @@ open biop
 open barrier_kind
 open amoop
 open agtype
+open XtvecModeReservedBehavior
 open XenvcfgCbieReservedBehavior
 open WaitReason
 open VectorHalf
@@ -194,8 +195,8 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_ex775877_ : Nat, k_ex775877_ ∈ {16, 32, 64, 128} -/
-def float_is_zero (op : (BitVec k_ex775877_)) : Bool :=
+/-- Type quantifiers: k_ex775898_ : Nat, k_ex775898_ ∈ {16, 32, 64, 128} -/
+def float_is_zero (op : (BitVec k_ex775898_)) : Bool :=
   let { exp := exp, mantissa := mantissa, sign := _ } := (float_decompose op)
   ((is_all_zeros exp) && (is_all_zeros mantissa))
 
