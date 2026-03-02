@@ -304,88 +304,87 @@ def run_hart_waiting (_step_no : Int) (wr : WaitReason) (instbits : (BitVec 32))
           (pure (Step_Waiting wr))))
 
 /-- Type quantifiers: step_no : Nat, 0 ≤ step_no -/
-def run_hart_active (step_no : Nat) : SailM Step := do
+def run_hart_active (step_no : Nat) : SailM Step := SailME.run do
   match (← (dispatchInterrupt (← readReg cur_privilege))) with
-  | .some (intr, priv) => (pure (Step_Pending_Interrupt (intr, priv)))
-  | none =>
+  | .some (intr, priv) => SailME.throw ((Step_Pending_Interrupt (intr, priv)) : Step)
+  | none => (pure ())
+  match (ext_fetch_hook (← (fetch ()))) with
+  | .F_Ext_Error e => (pure (Step_Ext_Fetch_Failure e))
+  | .F_Error (e, addr) => (pure (Step_Fetch_Failure ((Virtaddr addr), e)))
+  | .F_RVC h =>
     (do
-      match (ext_fetch_hook (← (fetch ()))) with
-      | .F_Ext_Error e => (pure (Step_Ext_Fetch_Failure e))
-      | .F_Error (e, addr) => (pure (Step_Fetch_Failure ((Virtaddr addr), e)))
-      | .F_RVC h =>
+      let _ : Unit := (sail_instr_announce h)
+      let _ : Unit := (fetch_callback h)
+      let instbits : instbits := (zero_extend (m := 32) h)
+      let instruction ← do (ext_decode_compressed h)
+      if ((get_config_print_instr ()) : Bool)
+      then
+        (pure (print_log_instr
+            (HAppend.hAppend "["
+              (HAppend.hAppend (Int.repr step_no)
+                (HAppend.hAppend "] ["
+                  (HAppend.hAppend (← (privLevel_to_str (← readReg cur_privilege)))
+                    (HAppend.hAppend "]: "
+                      (HAppend.hAppend (BitVec.toFormatted (← readReg PC))
+                        (HAppend.hAppend " ("
+                          (HAppend.hAppend (BitVec.toFormatted h)
+                            (HAppend.hAppend ") " (← (instruction_to_str instruction)))))))))))
+            (zero_extend (m := 64) (← readReg PC))))
+      else (pure ())
+      if ((← (is_landing_pad_expected ())) : Bool)
+      then
         (do
-          let _ : Unit := (sail_instr_announce h)
-          let _ : Unit := (fetch_callback h)
-          let instbits : instbits := (zero_extend (m := 32) h)
-          let instruction ← do (ext_decode_compressed h)
-          if ((get_config_print_instr ()) : Bool)
-          then
-            (pure (print_log_instr
-                (HAppend.hAppend "["
-                  (HAppend.hAppend (Int.repr step_no)
-                    (HAppend.hAppend "] ["
-                      (HAppend.hAppend (← (privLevel_to_str (← readReg cur_privilege)))
-                        (HAppend.hAppend "]: "
-                          (HAppend.hAppend (BitVec.toFormatted (← readReg PC))
-                            (HAppend.hAppend " ("
-                              (HAppend.hAppend (BitVec.toFormatted h)
-                                (HAppend.hAppend ") " (← (instruction_to_str instruction)))))))))))
-                (zero_extend (m := 64) (← readReg PC))))
-          else (pure ())
-          if ((← (is_landing_pad_expected ())) : Bool)
-          then
-            (do
-              let r ← do
-                (pure (Trap
-                    ((← readReg cur_privilege), (CTL_TRAP (make_landing_pad_exception ())), (← readReg PC))))
-              (pure (Step_Execute (r, instbits))))
-          else
-            (do
-              if ((← (currentlyEnabled Ext_Zca)) : Bool)
-              then
-                (do
-                  writeReg nextPC (BitVec.addInt (← readReg PC) 2)
-                  let result ← (( do
-                    match (← (execute instruction)) with
-                    | .ExecuteAs other_inst => (execute other_inst)
-                    | result => (pure result) ) : SailM ExecutionResult )
-                  (pure (Step_Execute (result, instbits))))
-              else (pure (Step_Execute ((Illegal_Instruction ()), instbits)))))
-      | .F_Base w =>
+          let r ← do
+            (pure (Trap
+                ((← readReg cur_privilege), (CTL_TRAP (make_landing_pad_exception ())), (← readReg PC))))
+          (pure (Step_Execute (r, instbits))))
+      else
         (do
-          let _ : Unit := (sail_instr_announce w)
-          let _ : Unit := (fetch_callback w)
-          let instbits : instbits := (zero_extend (m := 32) w)
-          let instruction ← do (ext_decode w)
-          if ((get_config_print_instr ()) : Bool)
-          then
-            (pure (print_log_instr
-                (HAppend.hAppend "["
-                  (HAppend.hAppend (Int.repr step_no)
-                    (HAppend.hAppend "] ["
-                      (HAppend.hAppend (← (privLevel_to_str (← readReg cur_privilege)))
-                        (HAppend.hAppend "]: "
-                          (HAppend.hAppend (BitVec.toFormatted (← readReg PC))
-                            (HAppend.hAppend " ("
-                              (HAppend.hAppend (BitVec.toFormatted w)
-                                (HAppend.hAppend ") " (← (instruction_to_str instruction)))))))))))
-                (zero_extend (m := 64) (← readReg PC))))
-          else (pure ())
-          if (((← (is_landing_pad_expected ())) && (not (is_lpad_instruction instruction))) : Bool)
+          if ((← (currentlyEnabled Ext_Zca)) : Bool)
           then
             (do
-              let r ← do
-                (pure (Trap
-                    ((← readReg cur_privilege), (CTL_TRAP (make_landing_pad_exception ())), (← readReg PC))))
-              (pure (Step_Execute (r, instbits))))
-          else
-            (do
-              writeReg nextPC (BitVec.addInt (← readReg PC) 4)
+              writeReg nextPC (BitVec.addInt (← readReg PC) 2)
               let result ← (( do
                 match (← (execute instruction)) with
                 | .ExecuteAs other_inst => (execute other_inst)
-                | result => (pure result) ) : SailM ExecutionResult )
-              (pure (Step_Execute (result, instbits))))))
+                | result => (pure result) ) : SailME Step ExecutionResult )
+              (pure (Step_Execute (result, instbits))))
+          else (pure (Step_Execute ((Illegal_Instruction ()), instbits)))))
+  | .F_Base w =>
+    (do
+      let _ : Unit := (sail_instr_announce w)
+      let _ : Unit := (fetch_callback w)
+      let instbits : instbits := (zero_extend (m := 32) w)
+      let instruction ← do (ext_decode w)
+      if ((get_config_print_instr ()) : Bool)
+      then
+        (pure (print_log_instr
+            (HAppend.hAppend "["
+              (HAppend.hAppend (Int.repr step_no)
+                (HAppend.hAppend "] ["
+                  (HAppend.hAppend (← (privLevel_to_str (← readReg cur_privilege)))
+                    (HAppend.hAppend "]: "
+                      (HAppend.hAppend (BitVec.toFormatted (← readReg PC))
+                        (HAppend.hAppend " ("
+                          (HAppend.hAppend (BitVec.toFormatted w)
+                            (HAppend.hAppend ") " (← (instruction_to_str instruction)))))))))))
+            (zero_extend (m := 64) (← readReg PC))))
+      else (pure ())
+      if (((← (is_landing_pad_expected ())) && (not (is_lpad_instruction instruction))) : Bool)
+      then
+        (do
+          let r ← do
+            (pure (Trap
+                ((← readReg cur_privilege), (CTL_TRAP (make_landing_pad_exception ())), (← readReg PC))))
+          (pure (Step_Execute (r, instbits))))
+      else
+        (do
+          writeReg nextPC (BitVec.addInt (← readReg PC) 4)
+          let result ← (( do
+            match (← (execute instruction)) with
+            | .ExecuteAs other_inst => (execute other_inst)
+            | result => (pure result) ) : SailME Step ExecutionResult )
+          (pure (Step_Execute (result, instbits)))))
 
 def wait_is_nop (wr : WaitReason) : Bool :=
   match wr with
@@ -414,8 +413,8 @@ def try_step (step_no : Nat) (exit_wait : Bool) : SailM Bool := do
   | .Step_Waiting _ =>
     assert (hart_is_waiting (← readReg hart_state)) "cannot be Waiting in a non-Wait state"
   | .Step_Execute (.Retire_Success (), _) =>
-    assert (hart_is_active (← readReg hart_state)) "postlude/step.sail:210.74-210.75"
-  | .Step_Execute (.ExecuteAs _, _) => assert false "postlude/step.sail:212.49-212.50"
+    assert (hart_is_active (← readReg hart_state)) "postlude/step.sail:211.74-211.75"
+  | .Step_Execute (.ExecuteAs _, _) => assert false "postlude/step.sail:213.49-213.50"
   | .Step_Execute (.Trap (priv, ctl, pc), _) => (set_next_pc (← (exception_handler priv ctl pc)))
   | .Step_Execute (.Memory_Exception (vaddr, e), _) => (handle_exception (bits_of_virtaddr vaddr) e)
   | .Step_Execute (.Illegal_Instruction (), instbits) =>
@@ -425,7 +424,7 @@ def try_step (step_no : Nat) (exit_wait : Bool) : SailM Bool := do
   | .Step_Execute (.Enter_Wait wr, instbits) =>
     (do
       if ((wait_is_nop wr) : Bool)
-      then assert (hart_is_active (← readReg hart_state)) "postlude/step.sail:222.41-222.42"
+      then assert (hart_is_active (← readReg hart_state)) "postlude/step.sail:223.41-223.42"
       else
         (do
           if ((get_config_print_instr ()) : Bool)
