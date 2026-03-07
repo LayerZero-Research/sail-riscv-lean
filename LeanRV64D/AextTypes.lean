@@ -200,16 +200,16 @@ open Architecture
 open AmocasOddRegisterReservedBehavior
 
 def undefined_amoop (_ : Unit) : SailM amoop := do
-  (internal_pick [AMOSWAP, AMOADD, AMOXOR, AMOAND, AMOOR, AMOMIN, AMOMAX, AMOMINU, AMOMAXU, AMOCAS])
+  (internal_pick [AMOSWAP, AMOAND, AMOOR, AMOXOR, AMOADD, AMOMIN, AMOMAX, AMOMINU, AMOMAXU, AMOCAS])
 
 /-- Type quantifiers: arg_ : Nat, 0 ≤ arg_ ∧ arg_ ≤ 9 -/
 def amoop_of_num (arg_ : Nat) : amoop :=
   match arg_ with
   | 0 => AMOSWAP
-  | 1 => AMOADD
-  | 2 => AMOXOR
-  | 3 => AMOAND
-  | 4 => AMOOR
+  | 1 => AMOAND
+  | 2 => AMOOR
+  | 3 => AMOXOR
+  | 4 => AMOADD
   | 5 => AMOMIN
   | 6 => AMOMAX
   | 7 => AMOMINU
@@ -219,15 +219,72 @@ def amoop_of_num (arg_ : Nat) : amoop :=
 def num_of_amoop (arg_ : amoop) : Int :=
   match arg_ with
   | AMOSWAP => 0
-  | AMOADD => 1
-  | AMOXOR => 2
-  | AMOAND => 3
-  | AMOOR => 4
+  | AMOAND => 1
+  | AMOOR => 2
+  | AMOXOR => 3
+  | AMOADD => 4
   | AMOMIN => 5
   | AMOMAX => 6
   | AMOMINU => 7
   | AMOMAXU => 8
   | AMOCAS => 9
+
+def amo_mnemonic_forwards (arg_ : amoop) : String :=
+  match arg_ with
+  | AMOSWAP => "amoswap"
+  | AMOAND => "amoand"
+  | AMOOR => "amoor"
+  | AMOXOR => "amoxor"
+  | AMOADD => "amoadd"
+  | AMOMIN => "amomin"
+  | AMOMAX => "amomax"
+  | AMOMINU => "amominu"
+  | AMOMAXU => "amomaxu"
+  | AMOCAS => "amocas"
+
+def amo_mnemonic_backwards (arg_ : String) : SailM amoop := do
+  match arg_ with
+  | "amoswap" => (pure AMOSWAP)
+  | "amoand" => (pure AMOAND)
+  | "amoor" => (pure AMOOR)
+  | "amoxor" => (pure AMOXOR)
+  | "amoadd" => (pure AMOADD)
+  | "amomin" => (pure AMOMIN)
+  | "amomax" => (pure AMOMAX)
+  | "amominu" => (pure AMOMINU)
+  | "amomaxu" => (pure AMOMAXU)
+  | "amocas" => (pure AMOCAS)
+  | _ =>
+    (do
+      assert false "Pattern match failure at unknown location"
+      throw Error.Exit)
+
+def amo_mnemonic_forwards_matches (arg_ : amoop) : Bool :=
+  match arg_ with
+  | AMOSWAP => true
+  | AMOAND => true
+  | AMOOR => true
+  | AMOXOR => true
+  | AMOADD => true
+  | AMOMIN => true
+  | AMOMAX => true
+  | AMOMINU => true
+  | AMOMAXU => true
+  | AMOCAS => true
+
+def amo_mnemonic_backwards_matches (arg_ : String) : Bool :=
+  match arg_ with
+  | "amoswap" => true
+  | "amoand" => true
+  | "amoor" => true
+  | "amoxor" => true
+  | "amoadd" => true
+  | "amomin" => true
+  | "amomax" => true
+  | "amominu" => true
+  | "amomaxu" => true
+  | "amocas" => true
+  | _ => false
 
 def maybe_aqrl_forwards (arg_ : (Bool × Bool)) : String :=
   match arg_ with

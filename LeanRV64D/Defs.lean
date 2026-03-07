@@ -87,7 +87,7 @@ inductive exception where
   deriving Inhabited, BEq, Repr
   open exception
 
-inductive amoop where | AMOSWAP | AMOADD | AMOXOR | AMOAND | AMOOR | AMOMIN | AMOMAX | AMOMINU | AMOMAXU | AMOCAS
+inductive amoop where | AMOSWAP | AMOAND | AMOOR | AMOXOR | AMOADD | AMOMIN | AMOMAX | AMOMINU | AMOMAXU | AMOCAS
   deriving BEq, Inhabited, Repr
   open amoop
 
@@ -1198,6 +1198,7 @@ structure PMA where
   read_idempotent : Bool
   write_idempotent : Bool
   misaligned_fault : misaligned_fault
+  atomic_support : AtomicSupport
   reservability : Reservability
   supports_cbo_zero : Bool
   deriving BEq, Inhabited, Repr

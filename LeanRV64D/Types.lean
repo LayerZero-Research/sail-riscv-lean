@@ -1317,19 +1317,6 @@ def exceptionType_to_str (e : ExceptionType) : String :=
   | .E_Breakpoint Brk_Hardware => "hardware-breakpoint"
   | .E_Extension e => (ext_exc_type_to_str e)
 
-def amo_mnemonic_forwards (arg_ : amoop) : String :=
-  match arg_ with
-  | AMOSWAP => "amoswap"
-  | AMOADD => "amoadd"
-  | AMOXOR => "amoxor"
-  | AMOAND => "amoand"
-  | AMOOR => "amoor"
-  | AMOMIN => "amomin"
-  | AMOMAX => "amomax"
-  | AMOMINU => "amominu"
-  | AMOMAXU => "amomaxu"
-  | AMOCAS => "amocas"
-
 def bitype_mnemonic_forwards (arg_ : biop) : String :=
   match arg_ with
   | BEQI => "beqi"
@@ -1899,7 +1886,7 @@ def itype_mnemonic_forwards (arg_ : iop) : String :=
   | ORI => "ori"
   | ANDI => "andi"
 
-/-- Type quantifiers: k_ex790706_ : Bool -/
+/-- Type quantifiers: k_ex791604_ : Bool -/
 def maybe_u_forwards (arg_ : Bool) : String :=
   match arg_ with
   | true => "u"
@@ -6391,7 +6378,7 @@ def lrsc_width_valid (width : Nat) : Bool :=
 def validDoubleRegs {n : _} (regs : (Vector fregidx n)) : Bool :=
   true
 
-/-- Type quantifiers: k_ex791861_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
+/-- Type quantifiers: k_ex792759_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
 def valid_load_encdec (width : Nat) (is_unsigned : Bool) : Bool :=
   ((width <b xlen_bytes) || ((not is_unsigned) && (width ≤b xlen_bytes)))
 

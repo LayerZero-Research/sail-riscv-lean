@@ -414,6 +414,7 @@ def sail_model_init (x_0 : Unit) : SailM Unit := do
                                           read_idempotent := true
                                           write_idempotent := true
                                           misaligned_fault := NoFault
+                                          atomic_support := AMONone
                                           reservability := RsrvNone
                                           supports_cbo_zero := false }
                           include_in_device_tree := false }, { base := 0b0000000000000000000000000000000000000010000000000000000000000000#64
@@ -426,6 +427,7 @@ def sail_model_init (x_0 : Unit) : SailM Unit := do
                                                                                read_idempotent := false
                                                                                write_idempotent := false
                                                                                misaligned_fault := AlignmentFault
+                                                                               atomic_support := AMONone
                                                                                reservability := RsrvNone
                                                                                supports_cbo_zero := false }
                                                                include_in_device_tree := false }, { base := 0b0000000000000000000000000000000010000000000000000000000000000000#64
@@ -438,6 +440,7 @@ def sail_model_init (x_0 : Unit) : SailM Unit := do
                                                                                                                     read_idempotent := true
                                                                                                                     write_idempotent := true
                                                                                                                     misaligned_fault := NoFault
+                                                                                                                    atomic_support := AMOCASQ
                                                                                                                     reservability := RsrvEventual
                                                                                                                     supports_cbo_zero := true }
                                                                                                     include_in_device_tree := true }]

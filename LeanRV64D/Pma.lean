@@ -1,3 +1,4 @@
+import LeanRV64D.Flow
 import LeanRV64D.Prelude
 import LeanRV64D.MemAddrtype
 import LeanRV64D.RangeUtil
@@ -242,6 +243,17 @@ def atomic_support_str_backwards_matches (arg_ : String) : Bool :=
   | "AMOCASQ" => true
   | _ => false
 
+/-- Type quantifiers: width : Nat, 0 < width ∧ width ≤ max_mem_access -/
+def pma_allows_atomic_op (pma : AtomicSupport) (op : amoop) (width : Nat) : Bool :=
+  match pma with
+  | AMONone => false
+  | AMOSwap => (op == AMOSWAP)
+  | AMOLogical => ((op == AMOSWAP) || ((op == AMOAND) || ((op == AMOOR) || (op == AMOXOR))))
+  | AMOArithmetic => (bne op AMOCAS)
+  | AMOCASW => ((bne op AMOCAS) || (width == 4))
+  | AMOCASD => ((bne op AMOCAS) || ((width == 4) || (width == 8)))
+  | AMOCASQ => ((bne op AMOCAS) || ((width == 4) || ((width == 8) || (width == 16))))
+
 def undefined_Reservability (_ : Unit) : SailM Reservability := do
   (internal_pick [RsrvNone, RsrvNonEventual, RsrvEventual])
 
@@ -309,6 +321,7 @@ def undefined_PMA (_ : Unit) : SailM PMA := do
           read_idempotent := ← (undefined_bool ())
           write_idempotent := ← (undefined_bool ())
           misaligned_fault := ← (undefined_misaligned_fault ())
+          atomic_support := ← (undefined_AtomicSupport ())
           reservability := ← (undefined_Reservability ())
           supports_cbo_zero := ← (undefined_bool ()) })
 
