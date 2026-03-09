@@ -256,27 +256,31 @@ def pte_is_invalid (pte_flags : (BitVec 8)) (pte_ext : (BitVec 10)) : SailM Bool
   (pure (((_get_PTE_Flags_V pte_flags) == 0#1) || ((((_get_PTE_Flags_R pte_flags) == 0#1) && (((_get_PTE_Flags_W
                 pte_flags) == 1#1) && (((_get_PTE_Flags_X pte_flags) == 0#1) && ((_get_MEnvcfg_SSE
                   (← readReg menvcfg)) == 0#1)))) || ((((_get_PTE_Flags_R pte_flags) == 0#1) && (((_get_PTE_Flags_W
-                  pte_flags) == 1#1) && ((_get_PTE_Flags_X pte_flags) == 1#1))) || ((((_get_PTE_Ext_N
-                  pte_ext) != 0#1) && (not (← (currentlyEnabled Ext_Svnapot)))) || ((((_get_PTE_Ext_PBMT
-                    pte_ext) != (zeros (n := 2))) && (not (← (currentlyEnabled Ext_Svpbmt)))) || ((((_get_PTE_Ext_RSW_60t59b
-                      pte_ext) != (zeros (n := 2))) && (not (← (currentlyEnabled Ext_Svrsw60t59b)))) || ((_get_PTE_Ext_reserved
-                    pte_ext) != (zeros (n := 5))))))))))
+                  pte_flags) == 1#1) && ((_get_PTE_Flags_X pte_flags) == 1#1))) || (((pte_is_non_leaf
+                pte_flags) && (((_get_PTE_Flags_A pte_flags) == 1#1) || (((_get_PTE_Flags_D
+                      pte_flags) == 1#1) || (((_get_PTE_Flags_U pte_flags) == 1#1) || (pte_ext != (zeros
+                        (n := 10))))))) || ((((_get_PTE_Ext_N pte_ext) != 0#1) && (not
+                  (← (currentlyEnabled Ext_Svnapot)))) || ((((_get_PTE_Ext_PBMT pte_ext) != (zeros
+                      (n := 2))) && (not (← (currentlyEnabled Ext_Svpbmt)))) || ((((_get_PTE_Ext_RSW_60t59b
+                        pte_ext) != (zeros (n := 2))) && (not
+                      (← (currentlyEnabled Ext_Svrsw60t59b)))) || ((_get_PTE_Ext_reserved pte_ext) != (zeros
+                      (n := 5)))))))))))
 
-/-- Type quantifiers: k_ex806471_ : Bool, k_ex806470_ : Bool -/
+/-- Type quantifiers: k_ex825463_ : Bool, k_ex825462_ : Bool -/
 def check_PTE_permission (access : (MemoryAccessType mem_payload)) (priv : Privilege) (mxr : Bool) (do_sum : Bool) (pte_flags : (BitVec 8)) (_ext : (BitVec 10)) (_ext_ptw : Unit) : SailM PTE_Check := SailME.run do
   let pte_U := (bit_to_bool (_get_PTE_Flags_U pte_flags))
   let pte_R := (bit_to_bool (_get_PTE_Flags_R pte_flags))
   let pte_W := (bit_to_bool (_get_PTE_Flags_W pte_flags))
   let pte_X := (bit_to_bool (_get_PTE_Flags_X pte_flags))
-  assert (zopz0zJzJzK pte_W pte_R) "sys/vmem_pte.sail:135.24-135.25"
+  assert (zopz0zJzJzK pte_W pte_R) "sys/vmem_pte.sail:136.24-136.25"
   let priv_ok ← (( do
     match priv with
     | User => (pure pte_U)
     | Supervisor => (pure ((not pte_U) || (do_sum && (is_load_store access))))
-    | Machine => (internal_error "sys/vmem_pte.sail" 143 "m-mode mem perm check")
-    | VirtualUser => (internal_error "sys/vmem_pte.sail" 144 "Hypervisor extension not supported")
+    | Machine => (internal_error "sys/vmem_pte.sail" 144 "m-mode mem perm check")
+    | VirtualUser => (internal_error "sys/vmem_pte.sail" 145 "Hypervisor extension not supported")
     | VirtualSupervisor =>
-      (internal_error "sys/vmem_pte.sail" 145 "Hypervisor extension not supported") ) : SailME
+      (internal_error "sys/vmem_pte.sail" 146 "Hypervisor extension not supported") ) : SailME
     PTE_Check Bool )
   if ((not priv_ok) : Bool)
   then (pure (PTE_Check_Failure ((), (PTE_No_Permission ()))))
@@ -285,7 +289,7 @@ def check_PTE_permission (access : (MemoryAccessType mem_payload)) (priv : Privi
       if (((not pte_R) && (pte_W && (not pte_X))) : Bool)
       then
         (do
-          assert (bool_bit_backwards (_get_MEnvcfg_SSE (← readReg menvcfg))) "sys/vmem_pte.sail:154.33-154.34"
+          assert (bool_bit_backwards (_get_MEnvcfg_SSE (← readReg menvcfg))) "sys/vmem_pte.sail:155.33-155.34"
           let shadow_stack_ok ← (( do
             match access with
             | .InstructionFetch () => (pure false)
@@ -299,16 +303,16 @@ def check_PTE_permission (access : (MemoryAccessType mem_payload)) (priv : Privi
             | .Atomic (_, ShadowStack, ShadowStack) => (pure true)
             | .CacheAccess _ => (pure false)
             | .LoadReserved ShadowStack =>
-              (internal_error "sys/vmem_pte.sail" 179
+              (internal_error "sys/vmem_pte.sail" 180
                 "Invalid payload (ShadowStack) for LoadReserved.")
             | .StoreConditional ShadowStack =>
-              (internal_error "sys/vmem_pte.sail" 180
+              (internal_error "sys/vmem_pte.sail" 181
                 "Invalid payload (ShadowStack) for StoreConditional.")
             | .Atomic (_, ShadowStack, Data) =>
-              (internal_error "sys/vmem_pte.sail" 181
+              (internal_error "sys/vmem_pte.sail" 182
                 "Invalid payloads (ShadowStack, Data) for Atomic.")
             | .Atomic (_, Data, ShadowStack) =>
-              (internal_error "sys/vmem_pte.sail" 182
+              (internal_error "sys/vmem_pte.sail" 183
                 "Invalid payloads (Data, ShadowStack) for Atomic.") ) : SailME PTE_Check Bool )
           if ((not shadow_stack_ok) : Bool)
           then SailME.throw ((PTE_Check_Failure ((), (PTE_No_Access ()))) : PTE_Check)

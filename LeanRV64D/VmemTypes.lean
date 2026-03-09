@@ -229,8 +229,6 @@ def mem_payload_str_backwards_matches (arg_ : String) : Bool :=
   | ".ss" => true
   | _ => false
 
-def default_write_acc : mem_payload := Data
-
 def is_shadow_stack_access (access : (MemoryAccessType mem_payload)) : SailM Bool := do
   match access with
   | .Load ShadowStack => (pure true)
@@ -244,24 +242,24 @@ def is_shadow_stack_access (access : (MemoryAccessType mem_payload)) : SailM Boo
   | .Atomic (_, Data, Data) => (pure false)
   | .CacheAccess _ => (pure false)
   | .LoadReserved ShadowStack =>
-    (internal_error "core/vmem_types.sail" 75 "Invalid payload (ShadowStack) for LoadReserved.")
+    (internal_error "core/vmem_types.sail" 73 "Invalid payload (ShadowStack) for LoadReserved.")
   | .StoreConditional ShadowStack =>
-    (internal_error "core/vmem_types.sail" 76 "Invalid payload (ShadowStack) for StoreConditional.")
+    (internal_error "core/vmem_types.sail" 74 "Invalid payload (ShadowStack) for StoreConditional.")
   | .Atomic (_, ShadowStack, Data) =>
-    (internal_error "core/vmem_types.sail" 77 "Invalid payloads (ShadowStack, Data) for Atomic.")
+    (internal_error "core/vmem_types.sail" 75 "Invalid payloads (ShadowStack, Data) for Atomic.")
   | .Atomic (_, Data, ShadowStack) =>
-    (internal_error "core/vmem_types.sail" 78 "Invalid payloads (Data, ShadowStack) for Atomic.")
+    (internal_error "core/vmem_types.sail" 76 "Invalid payloads (Data, ShadowStack) for Atomic.")
 
 def is_shadow_stack_amo (access : (MemoryAccessType mem_payload)) : SailM Bool := do
   match access with
   | .Atomic (_, ShadowStack, ShadowStack) => (pure true)
   | .LoadReserved ShadowStack =>
-    (internal_error "core/vmem_types.sail" 85 "Invalid payload (ShadowStack) for LoadReserved.")
+    (internal_error "core/vmem_types.sail" 83 "Invalid payload (ShadowStack) for LoadReserved.")
   | .StoreConditional ShadowStack =>
-    (internal_error "core/vmem_types.sail" 86 "Invalid payload (ShadowStack) for StoreConditional.")
+    (internal_error "core/vmem_types.sail" 84 "Invalid payload (ShadowStack) for StoreConditional.")
   | .Atomic (_, ShadowStack, Data) =>
-    (internal_error "core/vmem_types.sail" 87 "Invalid payloads (ShadowStack, Data) for Atomic.")
+    (internal_error "core/vmem_types.sail" 85 "Invalid payloads (ShadowStack, Data) for Atomic.")
   | .Atomic (_, Data, ShadowStack) =>
-    (internal_error "core/vmem_types.sail" 88 "Invalid payloads (Data, ShadowStack) for Atomic.")
+    (internal_error "core/vmem_types.sail" 86 "Invalid payloads (Data, ShadowStack) for Atomic.")
   | _ => (pure false)
 
