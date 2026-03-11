@@ -189,6 +189,7 @@ open InterruptType
 open ISA_Format
 open HartState
 open FetchResult
+open FeatureEnabledResult
 open FcsrRmReservedBehavior
 open Ext_DataAddr_Check
 open ExtStatus
@@ -230,8 +231,8 @@ def num_of_float_class (arg_ : float_class) : Int :=
   | float_class_snan => 8
   | float_class_qnan => 9
 
-/-- Type quantifiers: k_ex805768_ : Nat, k_ex805768_ ∈ {16, 32, 64, 128} -/
-def float_classify (f : (BitVec k_ex805768_)) : SailM float_class := do
+/-- Type quantifiers: k_ex806039_ : Nat, k_ex806039_ ∈ {16, 32, 64, 128} -/
+def float_classify (f : (BitVec k_ex806039_)) : SailM float_class := do
   if ((float_is_snan f) : Bool)
   then (pure float_class_snan)
   else

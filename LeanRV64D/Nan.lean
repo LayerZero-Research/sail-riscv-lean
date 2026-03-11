@@ -185,6 +185,7 @@ open InterruptType
 open ISA_Format
 open HartState
 open FetchResult
+open FeatureEnabledResult
 open FcsrRmReservedBehavior
 open Ext_DataAddr_Check
 open ExtStatus
@@ -195,18 +196,18 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_ex805325_ : Nat, k_ex805325_ ∈ {16, 32, 64, 128} -/
-def float_is_nan (op : (BitVec k_ex805325_)) : Bool :=
+/-- Type quantifiers: k_ex805596_ : Nat, k_ex805596_ ∈ {16, 32, 64, 128} -/
+def float_is_nan (op : (BitVec k_ex805596_)) : Bool :=
   let { exp := exp, mantissa := mantissa, sign := _ } := (float_decompose op)
   ((is_all_ones exp) && (! (is_all_zeros mantissa)))
 
-/-- Type quantifiers: k_ex805342_ : Nat, k_ex805342_ ∈ {16, 32, 64, 128} -/
-def float_is_snan (op : (BitVec k_ex805342_)) : Bool :=
+/-- Type quantifiers: k_ex805613_ : Nat, k_ex805613_ ∈ {16, 32, 64, 128} -/
+def float_is_snan (op : (BitVec k_ex805613_)) : Bool :=
   let { mantissa := mantissa, sign := _, exp := _ } := (float_decompose op)
   ((float_is_nan op) && (is_highest_zero mantissa))
 
-/-- Type quantifiers: k_ex805349_ : Nat, k_ex805349_ ∈ {16, 32, 64, 128} -/
-def float_is_qnan (op : (BitVec k_ex805349_)) : Bool :=
+/-- Type quantifiers: k_ex805620_ : Nat, k_ex805620_ ∈ {16, 32, 64, 128} -/
+def float_is_qnan (op : (BitVec k_ex805620_)) : Bool :=
   let { mantissa := mantissa, sign := _, exp := _ } := (float_decompose op)
   ((float_is_nan op) && (is_highest_one mantissa))
 

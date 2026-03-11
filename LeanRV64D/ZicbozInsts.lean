@@ -186,6 +186,7 @@ open InterruptType
 open ISA_Format
 open HartState
 open FetchResult
+open FeatureEnabledResult
 open FcsrRmReservedBehavior
 open Ext_DataAddr_Check
 open ExtStatus
@@ -197,6 +198,6 @@ open Architecture
 open AmocasOddRegisterReservedBehavior
 
 def cbo_zero_enabled (p : Privilege) : SailM Bool := do
-  (feature_enabled_for_priv p (BitVec.access (_get_MEnvcfg_CBZE (← readReg menvcfg)) 0)
-    (BitVec.access (_get_SEnvcfg_CBZE (← (read_senvcfg ()))) 0))
+  (feature_enabled_for_priv_bool p (BitVec.access (_get_MEnvcfg_CBZE (← readReg menvcfg)) 0)
+    (BitVec.access (_get_SEnvcfg_CBZE (← (read_senvcfg ()))) 0) 0#1)
 

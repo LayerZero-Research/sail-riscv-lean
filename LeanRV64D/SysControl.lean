@@ -203,6 +203,7 @@ open InterruptType
 open ISA_Format
 open HartState
 open FetchResult
+open FeatureEnabledResult
 open FcsrRmReservedBehavior
 open Ext_DataAddr_Check
 open ExtStatus
@@ -752,11 +753,13 @@ def xtval_exception_value (e : ExceptionType) (excinfo : (BitVec 64)) : (Option 
   then (some excinfo)
   else none
 
+def make_sync_exception (e : ExceptionType) (xtval : (BitVec 64)) : sync_exception :=
+  { trap := e
+    excinfo := (xtval_exception_value e xtval)
+    ext := none }
+
 def handle_exception (xtval : (BitVec 64)) (e : ExceptionType) : SailM Unit := do
-  let t : sync_exception :=
-    { trap := e
-      excinfo := (xtval_exception_value e xtval)
-      ext := none }
+  let t := (make_sync_exception e xtval)
   (set_next_pc (← (exception_handler (← readReg cur_privilege) (CTL_TRAP t) (← readReg PC))))
 
 def handle_interrupt (i : InterruptType) (del_priv : Privilege) : SailM Unit := do
@@ -781,7 +784,7 @@ def reset_misa (_ : Unit) : SailM Unit := do
   writeReg misa (Sail.BitVec.updateSubrange (← readReg misa) 8 8
     (Complement.complement (_get_Misa_E (← readReg misa))))
   if (((hartSupports Ext_F) && (hartSupports Ext_Zfinx)) : Bool)
-  then (internal_error "sys/sys_control.sail" 351 "F and Zfinx cannot both be enabled!")
+  then (internal_error "sys/sys_control.sail" 354 "F and Zfinx cannot both be enabled!")
   else (pure ())
   writeReg misa (Sail.BitVec.updateSubrange (← readReg misa) 5 5
     (bool_to_bit (hartSupports Ext_F)))

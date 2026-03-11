@@ -1,5 +1,6 @@
 import LeanRV64D.Prelude
 import LeanRV64D.CfiTypes
+import LeanRV64D.SysControl
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -186,6 +187,7 @@ open InterruptType
 open ISA_Format
 open HartState
 open FetchResult
+open FeatureEnabledResult
 open FcsrRmReservedBehavior
 open Ext_DataAddr_Check
 open ExtStatus
@@ -197,9 +199,8 @@ open Architecture
 open AmocasOddRegisterReservedBehavior
 
 def make_landing_pad_exception (_ : Unit) : sync_exception :=
-  { trap := (E_Software_Check ())
-    excinfo := (some (zero_extend (m := 64) (software_check_cause_forwards SWC_LANDING_PAD_FAULT)))
-    ext := none }
+  (make_sync_exception (E_Software_Check ())
+    (zero_extend (m := 64) (software_check_cause_forwards SWC_LANDING_PAD_FAULT)))
 
 def is_lpad_instruction (i : instruction) : Bool :=
   match i with

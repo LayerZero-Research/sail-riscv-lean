@@ -185,6 +185,7 @@ open InterruptType
 open ISA_Format
 open HartState
 open FetchResult
+open FeatureEnabledResult
 open FcsrRmReservedBehavior
 open Ext_DataAddr_Check
 open ExtStatus
@@ -195,11 +196,11 @@ open AtomicSupport
 open Architecture
 open AmocasOddRegisterReservedBehavior
 
-/-- Type quantifiers: k_ex805363_ : Nat, k_ex805363_ ∈ {16, 32, 64, 128} -/
-def float_is_positive (op : (BitVec k_ex805363_)) : Bool :=
+/-- Type quantifiers: k_ex805634_ : Nat, k_ex805634_ ∈ {16, 32, 64, 128} -/
+def float_is_positive (op : (BitVec k_ex805634_)) : Bool :=
   (is_highest_zero op)
 
-/-- Type quantifiers: k_ex805365_ : Nat, k_ex805365_ ∈ {16, 32, 64, 128} -/
-def float_is_negative (op : (BitVec k_ex805365_)) : Bool :=
+/-- Type quantifiers: k_ex805636_ : Nat, k_ex805636_ ∈ {16, 32, 64, 128} -/
+def float_is_negative (op : (BitVec k_ex805636_)) : Bool :=
   (is_highest_one op)
 

@@ -190,6 +190,7 @@ open InterruptType
 open ISA_Format
 open HartState
 open FetchResult
+open FeatureEnabledResult
 open FcsrRmReservedBehavior
 open Ext_DataAddr_Check
 open ExtStatus
@@ -1485,18 +1486,54 @@ def legalize_satp (arch : Architecture) (prev_value : (BitVec 64)) (written_valu
           else (pure prev_value))
       | _ => (pure prev_value))
 
-def feature_enabled_for_priv (p : Privilege) (machine_enable_bit : (BitVec 1)) (supervisor_enable_bit : (BitVec 1)) : SailM Bool := do
+def undefined_FeatureEnabledResult (_ : Unit) : SailM FeatureEnabledResult := do
+  (internal_pick [FEATURE_ENABLED, FEATURE_ILLEGAL, FEATURE_VIRTUAL])
+
+/-- Type quantifiers: arg_ : Nat, 0 ≤ arg_ ∧ arg_ ≤ 2 -/
+def FeatureEnabledResult_of_num (arg_ : Nat) : FeatureEnabledResult :=
+  match arg_ with
+  | 0 => FEATURE_ENABLED
+  | 1 => FEATURE_ILLEGAL
+  | _ => FEATURE_VIRTUAL
+
+def num_of_FeatureEnabledResult (arg_ : FeatureEnabledResult) : Int :=
+  match arg_ with
+  | FEATURE_ENABLED => 0
+  | FEATURE_ILLEGAL => 1
+  | FEATURE_VIRTUAL => 2
+
+def feature_enabled_for_priv (p : Privilege) (machine_enable_bit : (BitVec 1)) (supervisor_enable_bit : (BitVec 1)) (hypervisor_enable_bit : (BitVec 1)) : SailM FeatureEnabledResult := do
   match p with
-  | Machine => (pure true)
-  | Supervisor => (pure (machine_enable_bit == 1#1))
+  | Machine => (pure FEATURE_ENABLED)
+  | Supervisor =>
+    (if ((machine_enable_bit == 1#1) : Bool)
+    then (pure FEATURE_ENABLED)
+    else (pure FEATURE_ILLEGAL))
   | User =>
-    (pure ((machine_enable_bit == 1#1) && ((not (← (currentlyEnabled Ext_S))) || (supervisor_enable_bit == 1#1))))
+    (do
+      if (((machine_enable_bit == 1#1) && ((not (← (currentlyEnabled Ext_S))) || (supervisor_enable_bit == 1#1))) : Bool)
+      then (pure FEATURE_ENABLED)
+      else (pure FEATURE_ILLEGAL))
   | VirtualSupervisor =>
-    (internal_error "core/sys_regs.sail" 826 "Hypervisor extension not supported")
-  | VirtualUser => (internal_error "core/sys_regs.sail" 827 "Hypervisor extension not supported")
+    (if ((machine_enable_bit == 0#1) : Bool)
+    then (pure FEATURE_ILLEGAL)
+    else
+      (if ((hypervisor_enable_bit == 0#1) : Bool)
+      then (pure FEATURE_VIRTUAL)
+      else (pure FEATURE_ENABLED)))
+  | VirtualUser =>
+    (if ((machine_enable_bit == 0#1) : Bool)
+    then (pure FEATURE_ILLEGAL)
+    else
+      (if (((hypervisor_enable_bit == 0#1) || (supervisor_enable_bit == 0#1)) : Bool)
+      then (pure FEATURE_VIRTUAL)
+      else (pure FEATURE_ENABLED)))
+
+def feature_enabled_for_priv_bool (p : Privilege) (m : (BitVec 1)) (s : (BitVec 1)) (h : (BitVec 1)) : SailM Bool := do
+  (pure ((← (feature_enabled_for_priv p m s h)) == FEATURE_ENABLED))
 
 /-- Type quantifiers: index : Nat, 0 ≤ index ∧ index ≤ 31 -/
 def counter_enabled (index : Nat) (priv : Privilege) : SailM Bool := do
-  (feature_enabled_for_priv priv (BitVec.access (← readReg mcounteren) index)
-    (BitVec.access (← readReg scounteren) index))
+  (feature_enabled_for_priv_bool priv (BitVec.access (← readReg mcounteren) index)
+    (BitVec.access (← readReg scounteren) index) 0#1)
 

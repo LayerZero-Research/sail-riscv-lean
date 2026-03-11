@@ -1291,6 +1291,10 @@ abbrev Satp64 := (BitVec 64)
 
 abbrev Satp32 := (BitVec 32)
 
+inductive FeatureEnabledResult where | FEATURE_ENABLED | FEATURE_ILLEGAL | FEATURE_VIRTUAL
+  deriving BEq, Inhabited, Repr
+  open FeatureEnabledResult
+
 abbrev Minterrupts := (BitVec 64)
 
 abbrev Medeleg := (BitVec 64)
