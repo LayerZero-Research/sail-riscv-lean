@@ -505,7 +505,7 @@ def check_pmp (_ : Unit) : Bool :=
     valid)
   else valid
 
-/-- Type quantifiers: k_ex929580_ : Bool -/
+/-- Type quantifiers: k_ex929861_ : Bool -/
 def check_required_sstvala_option (name : String) (value : Bool) : Bool :=
   if ((not value) : Bool)
   then
@@ -663,15 +663,27 @@ def check_misc_extension_dependencies (_ : Unit) : Bool :=
           "The Ssqosid extensions is enabled but Zicsr is disabled: supporting Ssqosid requires Zicsr.")
       valid)
     else valid
-  if (((true : Bool) && (((Sail.BitVec.extractLsb sys_writable_hpm_counters 31 3) &&& (Sail.BitVec.extractLsb
-             sys_scounteren_writable_bits 31 3)) != (Sail.BitVec.extractLsb
-           sys_writable_hpm_counters 31 3))) : Bool)
+  let valid : Bool :=
+    if (((true : Bool) && (((Sail.BitVec.extractLsb sys_writable_hpm_counters 31 3) &&& (Sail.BitVec.extractLsb
+               sys_scounteren_writable_bits 31 3)) != (Sail.BitVec.extractLsb
+             sys_writable_hpm_counters 31 3))) : Bool)
+    then
+      (let valid : Bool := false
+      let _ : Unit :=
+        (print_endline
+          "The Sscounterenw extension is enabled but `scounteren` is not writable (via `base.scounteren_writable_bits`) for some supported HPM counters (specified in `base.writable_hpm_counters`).")
+      valid)
+    else valid
+  if ((true : Bool) : Bool)
   then
-    (let valid : Bool := false
-    let _ : Unit :=
-      (print_endline
-        "The Sscounterenw extension is enabled but `scounteren` is not writable (via `base.scounteren_writable_bits`) for some supported HPM counters (specified in `base.writable_hpm_counters`).")
-    valid)
+    (if (((xlen == 64) && (not (true : Bool))) : Bool)
+    then
+      (let valid : Bool := false
+      let _ : Unit :=
+        (print_endline
+          "The Svvptc extension is enabled but Sv39 is disabled: Svvptc depends on Sv39 on RV64.")
+      valid)
+    else valid)
   else valid
 
 def check_extension_param_constraints (_ : Unit) : Bool :=

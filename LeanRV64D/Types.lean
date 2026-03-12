@@ -657,6 +657,9 @@ def currentlyEnabled (merge_var : extension) : SailM Bool := do
   | Ext_Zicfilp =>
     (pure ((← (currentlyEnabled Ext_Zicsr)) && ((hartSupports Ext_Zicfilp) && (← (get_xLPE
               (← readReg cur_privilege))))))
+  | Ext_Svvptc =>
+    (pure ((hartSupports Ext_Svvptc) && ((← (currentlyEnabled Ext_Sv32)) || (← (currentlyEnabled
+              Ext_Sv39)))))
   | Ext_Svnapot => (pure false)
   | Ext_Svpbmt => (pure false)
   | Ext_Svrsw60t59b => (pure ((hartSupports Ext_Svrsw60t59b) && (← (currentlyEnabled Ext_Sv39))))
@@ -1888,7 +1891,7 @@ def itype_mnemonic_forwards (arg_ : iop) : String :=
   | ORI => "ori"
   | ANDI => "andi"
 
-/-- Type quantifiers: k_ex808849_ : Bool -/
+/-- Type quantifiers: k_ex809130_ : Bool -/
 def maybe_u_forwards (arg_ : Bool) : String :=
   match arg_ with
   | true => "u"
@@ -6380,7 +6383,7 @@ def lrsc_width_valid (width : Nat) : Bool :=
 def validDoubleRegs {n : _} (regs : (Vector fregidx n)) : Bool :=
   true
 
-/-- Type quantifiers: k_ex810004_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
+/-- Type quantifiers: k_ex810285_ : Bool, width : Nat, width ∈ {1, 2, 4, 8} -/
 def valid_load_encdec (width : Nat) (is_unsigned : Bool) : Bool :=
   ((width <b xlen_bytes) || ((not is_unsigned) && (width ≤b xlen_bytes)))
 
