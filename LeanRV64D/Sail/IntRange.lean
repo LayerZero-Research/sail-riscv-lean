@@ -16,7 +16,7 @@ instance : DecidableRel (fun (i : Int) (r : IntRange) => i ∈ r) := fun i r => 
   infer_instance
 
 theorem toNat_le {n : Nat} : Int.toNat m ≤ n ↔ m ≤ n := by
-  rw [Int.ofNat_le.symm, Int.toNat_eq_max, Int.max_le]; exact and_iff_left (Int.ofNat_zero_le _)
+  rw [Int.ofNat_le.symm, Int.toNat_eq_max, Int.max_le]; exact and_iff_left (Int.natCast_nonneg _)
 
 theorem lt_toNat {m : Nat} : m < Int.toNat n ↔ (m : Int) < n := by rw [← Int.not_le, ← Nat.not_le, toNat_le]
 
@@ -51,7 +51,7 @@ theorem toNat_lt_toNat {a b : Int} (hb : 0 < b) : Int.toNat a < Int.toNat b ↔ 
   have := range.step_pos
   loop init range.start (by simp)
 
-instance : ForIn' m IntRange Int inferInstance where
+instance [Monad m] : ForIn' m IntRange Int inferInstance where
   forIn' := IntRange.forIn'
 
 -- No separate `ForIn` instance is required because it can be derived from `ForIn'`.
@@ -77,7 +77,7 @@ instance : ForIn' m IntRange Int inferInstance where
   have := range.step_pos
   loop range.start
 
-instance : ForM m IntRange Int where
+instance [Monad m] : ForM m IntRange Int where
   forM := IntRange.forM
 
 syntax:max "[" withoutPosition(":" term) "]i" : term

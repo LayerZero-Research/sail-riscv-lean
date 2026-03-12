@@ -142,6 +142,6 @@ axiom extern_f64roundToInt : BitVec 3 → BitVec 64 → Bool → Unit
 
 -- Termination of currentlyEnabled
 instance : SizeOf extension where
-  sizeOf := extension.toCtorIdx
+  sizeOf := extension.ctorIdx
 
 macro_rules | `(tactic| decreasing_trivial) => `(tactic| decide)

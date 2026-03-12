@@ -188,7 +188,7 @@ def hex_bits_signed_forwards_matches (bv : (BitVec k_n)) : Bool :=
 def hex_bits_signed_backwards (tuple_0 : (Nat × String)) : (BitVec tuple_0.1) :=
   let (n, str) := tuple_0
   if (((String.take str 1) == "-") : Bool)
-  then ((BitVec.zero n) - (parse_hex_bits n (String.drop str 1)))
+  then ((BitVec.zero n) - (parse_hex_bits n ((String.drop str 1).toString)))
   else
     (let parsed := (parse_hex_bits n str)
     if (((BitVec.access parsed (n -i 1)) == 0#1) : Bool)
@@ -199,7 +199,7 @@ def hex_bits_signed_backwards (tuple_0 : (Nat × String)) : (BitVec tuple_0.1) :
 def hex_bits_signed_backwards_matches (tuple_0 : (Nat × String)) : Bool :=
   let (n, str) := tuple_0
   if (((String.take str 1) == "-") : Bool)
-  then (valid_hex_bits n (String.drop str 1))
+  then (valid_hex_bits n ((String.drop str 1).toString))
   else
     (if ((valid_hex_bits n str) : Bool)
     then
